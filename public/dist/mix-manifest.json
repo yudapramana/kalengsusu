@@ -1,0 +1,22 @@
+{
+    "/js/app.js": "/js/app.js",
+    "/js/jquery-1.12.4.min.js": "/js/jquery-1.12.4.min.js",
+    "/js/jquery-ui.js": "/js/jquery-ui.js",
+    "/js/popper.min.js": "/js/popper.min.js",
+    "/js/bootstrap.min.js": "/js/bootstrap.min.js",
+    "/js/owl.carousel.min.js": "/js/owl.carousel.min.js",
+    "/js/magnific-popup.min.js": "/js/magnific-popup.min.js",
+    "/js/waypoints.min.js": "/js/waypoints.min.js",
+    "/js/parallax.js": "/js/parallax.js",
+    "/js/jquery.countdown.min.js": "/js/jquery.countdown.min.js",
+    "/js/jquery.fitvids.js": "/js/jquery.fitvids.js",
+    "/js/jquery.counterup.min.js": "/js/jquery.counterup.min.js",
+    "/js/isotope.min.js": "/js/isotope.min.js",
+    "/js/jquery.elevatezoom.js": "/js/jquery.elevatezoom.js",
+    "/js/jquery.dd.min.js": "/js/jquery.dd.min.js",
+    "/js/datepicker.min.js": "/js/datepicker.min.js",
+    "/js/mdtimepicker.min.js": "/js/mdtimepicker.min.js",
+    "/js/demo-medical.js": "/js/demo-medical.js",
+    "/js/scripts.js": "/js/scripts.js",
+    "/css/app.css": "/css/app.css"
+}
