@@ -324,7 +324,7 @@ class PostController extends Controller
         $post->is_featured    = $request->is_featured == 'on' ? 1 : 0;
         $post->is_slider      = $request->is_slider == 'on' ? 1 : 0;
         $post->status         = 'draft';
-        $post->save();
+        // $post->save();
 
         $categorySlug = \App\Models\Category::find($request->category)->slug;
 
@@ -502,7 +502,7 @@ class PostController extends Controller
     // tapi kalau ingin set ulang ke draft, uncomment baris berikut:
     // $post->status = 'draft';
 
-    $post->save();
+    // $post->save();
 
     // ambil slug category untuk redirect
     $categoryModel = \App\Models\Category::find($request->input('category'));
