@@ -780,7 +780,7 @@ Route::group(['middleware' => ['web']], function () {
             }
 
             $categories = \App\Models\Category::withCount('posts')->get();
-            $tags = \App\Models\Tag::all();
+            $tags = \App\Models\Tag::take(5)->get();
             $recent_posts = \App\Models\Post::whereHas('category', function ($q) {
                 $q->where('slug', 'utama');
             })->take(3)->get();
