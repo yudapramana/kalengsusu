@@ -534,12 +534,13 @@
                             <div class="carousel-inner">
                                 @foreach ($recent_posts as $key => $act)
                                     <div class="carousel-item carousel-item-other iniaja @if ($key == 0) active @endif">
-                                        <img src="{{ $act->cover }}" class="d-block w-100" alt="...">
+                                        <img src="{{ $act->cover_url }}" class="d-block w-100" alt="...">
                                         <div class="carousel-caption">
                                             {{-- <div class="carousel-caption d-none d-md-block"> --}}
 
-                                            <small style="color:#ffffff;">{{ \Carbon\Carbon::parse($act->created_at)->format('d
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    F Y') }}</small><br>
+                                            <small
+                                                style="color:#ffffff;">{{ \Carbon\Carbon::parse($act->created_at)->format('d
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    F Y') }}</small><br>
                                             <a style="color:#ffffff;" href="{{ config('isec.base_url') }}/post/{{ $act->slug }}">{{ \Illuminate\Support\Str::limit($act->title, 100, $end = '...') }}&nbsp;</a>
 
                                         </div>
@@ -573,7 +574,7 @@
                                         <div class="post_footer">
                                             <div class="post_img">
                                                 <a href="{{ config('isec.base_url') }}/post/{{ $post->slug }}">
-                                                    @if ($post->cover)
+                                                    @if ($post->cover_url)
                                                         <img src="{{ $post->square_cover_image }}" alt="letest_post1" width="77" style="border-radius: 5px;">
                                                     @endif
                                                 </a>
@@ -627,7 +628,7 @@
                             <div class="post_footer">
                                 <div class="post_img">
                                     <a href="{{ config('isec.base_url') }}/post/{{ $post->slug }}">
-                                        @if ($post->cover)
+                                        @if ($post->cover_url)
                                             <img src="{{ $post->square_cover_image }}" alt="letest_post1" width="90" style="border-radius: 5px;">
                                         @endif
                                     </a>
