@@ -129,8 +129,7 @@
                                         </div>
 
                                         <div class="col-12 center text-center">
-                                            <div class="cf-turnstile" data-sitekey="{{ env('TURNSTILE_SITE_KEY') }}" data-theme="light">
-                                            </div>
+                                            <div id="turnstile-container"></div>
                                             @error('turnstile')
                                                 <div class="text-error">{{ $message }}</div>
                                             @enderror
@@ -288,6 +287,88 @@
                 }
             }, false);
 
+        })();
+
+        // --- Turnstile render + button state handling ---
+        (function() {
+            const turnstileContainer = document.getElementById('turnstile-container');
+            const loginBtn = document.getElementById('btn-login');
+            const formEl = document.getElementById('login-form');
+
+            // disable login button while widget not ready
+            if (loginBtn) loginBtn.disabled = true;
+
+            // createOrUpdateHiddenToken places token into a hidden input so backend receives it
+            function createOrUpdateHiddenToken(token) {
+                let input = formEl.querySelector('input[name="cf-turnstile-response"]');
+                if (!input) {
+                    input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'cf-turnstile-response';
+                    formEl.appendChild(input);
+                }
+                input.value = token || '';
+                return input;
+            }
+
+            // called when Turnstile API becomes available; render widget
+            function renderTurnstile() {
+                try {
+                    // safety: if already rendered, skip
+                    if (!window.turnstile || !turnstileContainer) return;
+
+                    // render & keep widget id if needed
+                    window._turnstileWidgetId = window.turnstile.render(turnstileContainer, {
+                        sitekey: "{{ env('TURNSTILE_SITE_KEY') }}",
+                        theme: 'light',
+                        callback: function(token) {
+                            // token received -> enable login
+                            createOrUpdateHiddenToken(token);
+                            if (loginBtn) loginBtn.disabled = false;
+                        },
+                        'expired-callback': function() {
+                            // token expired -> clear and disable
+                            createOrUpdateHiddenToken('');
+                            if (loginBtn) loginBtn.disabled = true;
+                        },
+                        'error-callback': function() {
+                            // in case of error, let user try (enable), but you can also keep disabled if you prefer
+                            // we'll enable the button so user can still proceed (server will validate)
+                            if (loginBtn) loginBtn.disabled = false;
+                        }
+                    });
+
+                    // If the widget renders but user doesn't interact yet, we keep the button disabled until a token arrives.
+                    // Optionally you can enable after a timeout, but we keep it strict here.
+
+                } catch (err) {
+                    console.warn('Turnstile render error', err);
+                    // fallback: enable button so user is not stuck
+                    if (loginBtn) loginBtn.disabled = false;
+                }
+            }
+
+            // wait for window.turnstile to be available (CDN async) then render
+            if (window.turnstile) {
+                renderTurnstile();
+            } else {
+                // wait up to ~5s for turnstile to load
+                let attempts = 0;
+                const interval = setInterval(function() {
+                    attempts++;
+                    if (window.turnstile) {
+                        clearInterval(interval);
+                        renderTurnstile();
+                    } else if (attempts > 50) { // ~5 seconds (50 * 100ms)
+                        clearInterval(interval);
+                        console.warn('Turnstile did not load in time, enabling login button as fallback.');
+                        if (loginBtn) loginBtn.disabled = false; // fallback: avoid blocking user indefinitely
+                    }
+                }, 100);
+            }
+
+            // Optional: if you want to explicitly reset Turnstile token before form submit
+            // (we trust the widget + server; but if required, we could call turnstile.getResponse or similar)
         })();
     </script>
 
