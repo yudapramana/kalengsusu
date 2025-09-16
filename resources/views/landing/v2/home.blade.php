@@ -540,7 +540,7 @@
 
                                             <small
                                                 style="color:#ffffff;">{{ \Carbon\Carbon::parse($act->created_at)->format('d
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    F Y') }}</small><br>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    F Y') }}</small><br>
                                             <a style="color:#ffffff;" href="{{ config('isec.base_url') }}/post/{{ $act->slug }}">{{ \Illuminate\Support\Str::limit($act->title, 100, $end = '...') }}&nbsp;</a>
 
                                         </div>
@@ -574,9 +574,9 @@
                                         <div class="post_footer">
                                             <div class="post_img">
                                                 <a href="{{ config('isec.base_url') }}/post/{{ $post->slug }}">
-                                                    @if ($post->cover_url)
-                                                        <img src="{{ $post->square_cover_image }}" alt="letest_post1" width="77" style="border-radius: 5px;">
-                                                    @endif
+                                                    {{-- @if ($post->cover_url) --}}
+                                                    <img src="{{ $post->square_cover_image }}" alt="letest_post1" width="77" style="border-radius: 5px;">
+                                                    {{-- @endif --}}
                                                 </a>
                                             </div>
                                             <div class="post_content" style="line-height: 1 !important">
@@ -628,9 +628,9 @@
                             <div class="post_footer">
                                 <div class="post_img">
                                     <a href="{{ config('isec.base_url') }}/post/{{ $post->slug }}">
-                                        @if ($post->cover_url)
-                                            <img src="{{ $post->square_cover_image }}" alt="letest_post1" width="90" style="border-radius: 5px;">
-                                        @endif
+                                        {{-- @if ($post->cover_url) --}}
+                                        <img src="{{ $post->square_cover_image }}" alt="letest_post1" width="90" style="border-radius: 5px;">
+                                        {{-- @endif --}}
                                     </a>
                                 </div>
                                 <div class="post_content" style="line-height: 1 !important">
