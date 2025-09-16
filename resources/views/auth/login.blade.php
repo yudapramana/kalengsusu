@@ -243,8 +243,8 @@
                     if (res.ok) {
                         // success
                         if (json.status === 'success' || json.status === 'ok' || json.redirect) {
-                            // gunakan redirect dari server (jika ada), kalau tidak pakai route helper ke admin/home
-                            const redirect = json.redirect || "{{ route('admin/home') }}";
+                            // gunakan redirect dari server (jika ada), kalau tidak pakai APP_URL + '/admin/home'
+                            const redirect = json.redirect || "{{ rtrim(env('APP_URL'), '/') }}/admin/home";
                             window.location.href = redirect;
                             return;
                         } else {
