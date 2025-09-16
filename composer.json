@@ -17,6 +17,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
         "mews/captcha": "^3.3",
+        "mews/purifier": "^3.4",
         "orangehill/iseed": "^3.0",
         "owen-it/laravel-auditing": "^13.5",
         "shetabit/visitor": "^4.0",

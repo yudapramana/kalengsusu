@@ -7,7 +7,7 @@
 <script src="{{ asset('niceadmin/vendor/simple-datatables/simple-datatables.js') }}"></script>
 <script src="{{ asset('niceadmin/vendor/tinymce/tinymce.min.js') }}"></script>
 <script src="{{ asset('niceadmin/vendor/php-email-form/validate.js') }}"></script>
-<script src="{{ asset('niceadmin/js/main.js') }}"></script>
+{{-- <script src="{{ asset('niceadmin/js/main.js') }}"></script> --}}
 
 <script src="{{ asset('js/jquery.blockUI.js') }}"></script>
 

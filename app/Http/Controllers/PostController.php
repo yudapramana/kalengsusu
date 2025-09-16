@@ -8,6 +8,8 @@ use Auth;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
+use Purifier; // mews/purifier
 
 class PostController extends Controller
 {
@@ -35,6 +37,9 @@ class PostController extends Controller
         } else {
             $category = 'utama';
         }
+
+        $categoryRow = Category::where('slug', $category)->firstOrFail();
+        $categoryID = $category ? $categoryRow->id : null;
 
 
         $user = Auth::user();
@@ -135,11 +140,23 @@ class PostController extends Controller
                 ->addColumn('action', function ($post) use ($user) {
                     $btn = '';
 
-                    $btn .= '<a href="' . route('posts.edit', $post->id) . '" class="btn btn-sm btn-warning btn-xs"><i class="bi bi-pencil-square"></i></a>&nbsp;';
-                    // $btn .= '<button id="editBtn" type="button" class="btn btn-sm btn-warning btn-xs" data-bs-toggle="modal" data-bs-target="#tambahGroup" data-bs-title="Edit Data" data-title="Edit Data Pengguna"><i class="bi bi-pencil-square"></i></button>&nbsp;';
+                    // cek apakah status published
+                    $isPublished = $post->status === 'published';
 
+                    // tombol edit
+                    if ($isPublished) {
+                        $btn .= '<button class="btn btn-sm btn-warning btn-xs" disabled><i class="bi bi-pencil-square"></i></button>&nbsp;';
+                    } else {
+                        $btn .= '<a href="' . route('posts.edit', $post->id) . '" class="btn btn-sm btn-warning btn-xs"><i class="bi bi-pencil-square"></i></a>&nbsp;';
+                    }
+
+                    // tombol hapus
                     if ($user->hasRole('super_administrator') || $user->hasRole('administrator') || $user->hasRole('kontributor_utama')) {
-                        $btn .= '<button id="destroyBtn" type="button" class="btn btn-sm btn-danger btn-xs" data-bs-id_item="' . $post->id  . '" data-id_item="' .  $post->id  . '"><i class="bi bi-trash-fill"></i></button>';
+                        if ($isPublished) {
+                            $btn .= '<button class="btn btn-sm btn-danger btn-xs" disabled><i class="bi bi-trash-fill"></i></button>';
+                        } else {
+                            $btn .= '<button id="destroyBtn" type="button" class="btn btn-sm btn-danger btn-xs" data-bs-id_item="' . $post->id  . '" data-id_item="' .  $post->id  . '"><i class="bi bi-trash-fill"></i></button>';
+                        }
                     }
 
                     return $btn;
@@ -193,25 +210,15 @@ class PostController extends Controller
 
                             </div>';
 
-            // $html_filter .= '<div class="col-md-6 box-daftar-pelayanan">
-            //                     <label for="id_status_filter" class="form-label fw-bold">Pilih Status</label>
-
-            //                     <select class="form-control select2-filter id_status_filter" id="id_status_filter">
-            //                         <option value="draft">Draft</option>
-            //                         <option value="published">Published</option>
-            //                         <option value="archived">Archived</option>';
-
-            // $html_filter .= '  </select>
-
-            //                 </div>';
-
 
             $datatable->with([
-                'html_filter' => $html_filter
+                'html_filter' => $html_filter,
             ]);
 
             return $datatable->make(true);
         }
+
+        $kabkotas = Kabkota::all();
         return view(
             'admin.posts.index',
             [
@@ -219,6 +226,8 @@ class PostController extends Controller
                 'br1'  => 'Berita',
                 'br2'  => ucwords($category),
                 'category'  => $category,
+                'categoryID' => $categoryID,
+                'kabkotas' => $kabkotas,
             ],
         );
     }
@@ -249,59 +258,142 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    /**
+ * Store a newly created resource in storage.
+ */
     public function store(Request $request)
     {
         $user = Auth::user();
-        $data = $request->input();
 
+        // return $request->all();
 
         $validator = Validator::make($request->all(), [
             "title"     => "required|unique:posts,title",
             "desc"      => "required",
             "category"  => "required",
-            // "tags"      => "array|required",
             "keywords"  => "required",
             "meta_desc" => "required",
+            'cover_public_id' => ['required','string','regex:/^[A-Za-z0-9_\-\/]+$/'],
+            'cover_version' => ['nullable','regex:/^v\d+$/'],
+            'cover_ext' => ['nullable','in:jpg,jpeg,png,gif,webp'],
         ]);
 
+        $payload = [
+            'public_id' => $request->input('cover_public_id'),
+            'version'   => $request->input('cover_version') ?: null,
+            'ext'       => $request->input('cover_ext') ?: null,
+            'uploaded_at' => now()->toDateTimeString(),
+        ];
+
+
+        // Encrypt payload menjadi satu string acak
+        $cover = Crypt::encryptString(json_encode($payload));
+
+        // Sanitasi HTML (izinkan tag dasar — konfigurasi di config/purifier.php)
+        $cleanDesc = Purifier::clean($request->input('desc'));
+        
+
+
         if ($validator->fails()) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'status' => 'error',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
         }
 
         $post               = new Post();
-        $post->cover        = isset($request->cover) ? $request->cover : null;
+        $post->cover        = $cover ?? null;
         $post->title        = $request->title;
         $post->slug         = \Str::slug($request->title);
-        $post->user_id      = Auth::user()->id;
+        $post->user_id      = $user->id;
         $post->category_id  = $request->category;
-        $post->desc         = $request->desc;
+        $post->desc         = $cleanDesc;
         $post->keywords     = $request->keywords;
         $post->meta_desc    = $request->meta_desc;
         $post->id_kabkota   = $request->kabkota;
-        $post->editor    = $request->editor;
-        $post->photographer   = $request->photographer;
+        $post->editor       = $request->editor;
+        $post->photographer = $request->photographer;
 
-        $post->is_breaking      = $request->is_breaking == 'on' ? 1 : 0;
-        $post->is_recommended   = $request->is_recommended == 'on' ? 1 : 0;
-        $post->is_featured      = $request->is_featured == 'on' ? 1 : 0;
-        $post->is_slider        = $request->is_slider == 'on' ? 1 : 0;
-	$post->status = 'draft';
-
-        // if ($user->hasRole('kontributor_daerah')) {
-        //    $post->status = 'draft';
-        // }
-
-        // untag
-        // $post->save();
-
-        // $post->tags()->attach($request->tags);
+        $post->is_breaking    = $request->is_breaking == 'on' ? 1 : 0;
+        $post->is_recommended = $request->is_recommended == 'on' ? 1 : 0;
+        $post->is_featured    = $request->is_featured == 'on' ? 1 : 0;
+        $post->is_slider      = $request->is_slider == 'on' ? 1 : 0;
+        $post->status         = 'draft';
+        $post->save();
 
         $categorySlug = \App\Models\Category::find($request->category)->slug;
 
-        return redirect()->route('posts.index', ['category' => $categorySlug])->with('success', 'Data added successfully');
+        if ($request->ajax()) {
+            return response()->json([
+                'status'   => 'success',
+                'message'  => 'Data added successfully',
+                'redirect' => route('posts.index', ['category' => $categorySlug]),
+                'data'     => $post
+            ]);
+        }
+
+        return redirect()
+            ->route('posts.index', ['category' => $categorySlug])
+            ->with('success', 'Data added successfully');
     }
+
+    // public function store(Request $request)
+    // {
+    //     $user = Auth::user();
+    //     $data = $request->input();
+
+
+    //     $validator = Validator::make($request->all(), [
+    //         "title"     => "required|unique:posts,title",
+    //         "desc"      => "required",
+    //         "category"  => "required",
+    //         "keywords"  => "required",
+    //         "meta_desc" => "required",
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return redirect()->back()
+    //             ->withErrors($validator)
+    //             ->withInput();
+    //     }
+
+    //     $post               = new Post();
+    //     $post->cover        = isset($request->cover) ? $request->cover : null;
+    //     $post->title        = $request->title;
+    //     $post->slug         = \Str::slug($request->title);
+    //     $post->user_id      = Auth::user()->id;
+    //     $post->category_id  = $request->category;
+    //     $post->desc         = $request->desc;
+    //     $post->keywords     = $request->keywords;
+    //     $post->meta_desc    = $request->meta_desc;
+    //     $post->id_kabkota   = $request->kabkota;
+    //     $post->editor    = $request->editor;
+    //     $post->photographer   = $request->photographer;
+
+    //     $post->is_breaking      = $request->is_breaking == 'on' ? 1 : 0;
+    //     $post->is_recommended   = $request->is_recommended == 'on' ? 1 : 0;
+    //     $post->is_featured      = $request->is_featured == 'on' ? 1 : 0;
+    //     $post->is_slider        = $request->is_slider == 'on' ? 1 : 0;
+	//     $post->status = 'draft';
+
+    //     // if ($user->hasRole('kontributor_daerah')) {
+    //     //    $post->status = 'draft';
+    //     // }
+
+    //     // untag
+    //     // $post->save();
+
+    //     // $post->tags()->attach($request->tags);
+
+    //     $categorySlug = \App\Models\Category::find($request->category)->slug;
+
+    //     return redirect()->route('posts.index', ['category' => $categorySlug])->with('success', 'Data added successfully');
+    // }
 
     /**
      * Display the specified resource.
@@ -341,52 +433,141 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
+{
+    $user = Auth::user();
 
-        // return $request->all();
-        $validator = Validator::make($request->all(), [
-            "title"     => "required|unique:posts,title," . $id,
-            "desc"      => "required",
-            "category"  => "required",
-            "tags"      => "array|required",
-            "keywords"  => "required",
-            "meta_desc" => "required",
-        ]);
+    // ambil post
+    $post = Post::findOrFail($id);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
+    // validasi
+    $validator = Validator::make($request->all(), [
+        "title" => "required|unique:posts,title," . $id, // unique kecuali record ini
+        "desc" => "required",
+        "category" => "required",
+        "keywords" => "required",
+        "meta_desc" => "required",
+        // saat update, cover bisa nullable (hanya required saat create pada store)
+        'cover_public_id' => ['nullable','string','regex:/^[A-Za-z0-9_\-\/]+$/'],
+        'cover_version' => ['nullable','regex:/^v\d+$/'],
+        'cover_ext' => ['nullable','in:jpg,jpeg,png,gif,webp'],
+    ]);
+
+    if ($validator->fails()) {
+        if ($request->ajax()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors()
+            ], 422);
         }
-
-
-        $post = Post::findOrFail($id);
-        $post->cover        = isset($request->cover) ? $request->cover : null;
-        $post->title        = $request->title;
-        $post->slug         = $request->slug;
-        $post->category_id  = $request->category;
-        $post->desc         = $request->desc;
-        $post->keywords     = $request->keywords;
-        $post->meta_desc    = $request->meta_desc;
-        $post->id_kabkota    = $request->kabkota;
-        $post->is_breaking      = $request->is_breaking == 'on' ? 1 : 0;
-        $post->is_recommended   = $request->is_recommended == 'on' ? 1 : 0;
-        $post->is_featured      = $request->is_featured == 'on' ? 1 : 0;
-        $post->is_slider        = $request->is_slider == 'on' ? 1 : 0;
-        $post->editor    = $request->editor;
-        $post->photographer   = $request->photographer;
-        // untag
-        // $post->save();
-
-        // $post->tags()->sync($request->tags);
-
-        $categorySlug = \App\Models\Category::find($request->category)->slug;
-
-        return redirect()->route('posts.index', ['category' => $categorySlug])->with('success', 'Data added successfully');
-
-
-        // return redirect()->route('posts.index')->with('success', 'Data updated successfully');
+        return redirect()->back()
+            ->withErrors($validator)
+            ->withInput();
     }
+
+    // jika ada cover baru (cover_public_id diisi), buat payload enkripsi baru
+    if ($request->filled('cover_public_id')) {
+        $payload = [
+            'public_id' => $request->input('cover_public_id'),
+            'version' => $request->input('cover_version') ?: null,
+            'ext' => $request->input('cover_ext') ?: null,
+            'uploaded_at' => now()->toDateTimeString(),
+        ];
+        $cover = Crypt::encryptString(json_encode($payload));
+        $post->cover = $cover;
+    }
+    // jika tidak ada input cover, biarkan cover existing (tidak diubah)
+
+    // Sanitasi HTML untuk desc
+    $cleanDesc = Purifier::clean($request->input('desc'));
+
+    // update atribut
+    $post->title = $request->input('title');
+    $post->slug = \Str::slug($request->input('title'));
+    $post->user_id = $user->id;
+    $post->category_id = $request->input('category');
+    $post->desc = $cleanDesc;
+    $post->keywords = $request->input('keywords');
+    $post->meta_desc = $request->input('meta_desc');
+    $post->id_kabkota = $request->input('kabkota');
+    $post->editor = $request->input('editor');
+    $post->photographer = $request->input('photographer');
+
+    // checkboxes: gunakan has() karena saat unchecked input tidak terkirim
+    $post->is_breaking = $request->has('is_breaking') ? 1 : 0;
+    $post->is_recommended = $request->has('is_recommended') ? 1 : 0;
+    $post->is_featured = $request->has('is_featured') ? 1 : 0;
+    $post->is_slider = $request->has('is_slider') ? 1 : 0;
+
+    // status: jangan ubah jika ingin mempertahankan existing,
+    // tapi kalau ingin set ulang ke draft, uncomment baris berikut:
+    // $post->status = 'draft';
+
+    $post->save();
+
+    // ambil slug category untuk redirect
+    $categoryModel = \App\Models\Category::find($request->input('category'));
+    $categorySlug = $categoryModel ? $categoryModel->slug : null;
+
+    if ($request->ajax()) {
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data updated successfully',
+            'redirect' => $categorySlug ? route('posts.index', ['category' => $categorySlug]) : route('posts.index'),
+            'data' => $post
+        ]);
+    }
+
+    return redirect()->route('posts.index', ['category' => $categorySlug])
+        ->with('success', 'Data updated successfully');
+}
+
+    // public function update(Request $request, $id)
+    // {
+
+    //     // return $request->all();
+    //     $validator = Validator::make($request->all(), [
+    //         "title"     => "required|unique:posts,title," . $id,
+    //         "desc"      => "required",
+    //         "category"  => "required",
+    //         "tags"      => "array|required",
+    //         "keywords"  => "required",
+    //         "meta_desc" => "required",
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return redirect()->back()
+    //             ->withErrors($validator)
+    //             ->withInput();
+    //     }
+
+
+    //     $post = Post::findOrFail($id);
+    //     $post->cover        = isset($request->cover) ? $request->cover : null;
+    //     $post->title        = $request->title;
+    //     $post->slug         = $request->slug;
+    //     $post->category_id  = $request->category;
+    //     $post->desc         = $request->desc;
+    //     $post->keywords     = $request->keywords;
+    //     $post->meta_desc    = $request->meta_desc;
+    //     $post->id_kabkota    = $request->kabkota;
+    //     $post->is_breaking      = $request->is_breaking == 'on' ? 1 : 0;
+    //     $post->is_recommended   = $request->is_recommended == 'on' ? 1 : 0;
+    //     $post->is_featured      = $request->is_featured == 'on' ? 1 : 0;
+    //     $post->is_slider        = $request->is_slider == 'on' ? 1 : 0;
+    //     $post->editor    = $request->editor;
+    //     $post->photographer   = $request->photographer;
+    //     // untag
+    //     // $post->save();
+
+    //     // $post->tags()->sync($request->tags);
+
+    //     $categorySlug = \App\Models\Category::find($request->category)->slug;
+
+    //     return redirect()->route('posts.index', ['category' => $categorySlug])->with('success', 'Data added successfully');
+
+
+    //     // return redirect()->route('posts.index')->with('success', 'Data updated successfully');
+    // }
 
     /**
      * Remove the specified resource from storage.
