@@ -243,9 +243,8 @@
                     if (res.ok) {
                         // success
                         if (json.status === 'success' || json.status === 'ok' || json.redirect) {
-                            // gunakan redirect dari server (jika ada), kalau tidak pakai path relatif "admin/home"
-                            // path relatif (tanpa leading slash) membuat URL "/controlcenter/login" -> "/controlcenter/admin/home"
-                            const redirect = json.redirect || 'admin/home';
+                            // gunakan redirect dari server (jika ada), kalau tidak pakai route helper ke admin/home
+                            const redirect = json.redirect || "{{ route('admin/home') }}";
                             window.location.href = redirect;
                             return;
                         } else {
