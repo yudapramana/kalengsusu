@@ -435,9 +435,7 @@
                     <div class="post_footer">
                         <div class="post_img">
                             <a href="{{ config('isec.base_url') }}/post/{{ $featureds[5]->slug }}">
-                                @if ($featureds[5]->cover)
-                                    <img src="{{ $featureds[5]->square_cover_image }}" alt="letest_post1" width="90" style="border-radius: 5px;">
-                                @endif
+                                <img src="{{ $featureds[5]->square_cover_image }}" alt="letest_post1" width="90" style="border-radius: 5px;">
                             </a>
                         </div>
                         <div class="post_content" style="line-height: 1 !important">
@@ -461,9 +459,7 @@
                     <div class="post_footer">
                         <div class="post_img">
                             <a href="{{ config('isec.base_url') }}/post/{{ $featureds[6]->slug }}">
-                                @if ($featureds[6]->cover)
-                                    <img src="{{ $featureds[6]->square_cover_image }}" alt="letest_post1" width="90" style="border-radius: 5px;">
-                                @endif
+                                <img src="{{ $featureds[6]->square_cover_image }}" alt="letest_post1" width="90" style="border-radius: 5px;">
                             </a>
                         </div>
                         <div class="post_content" style="line-height: 1 !important">
@@ -487,9 +483,7 @@
                     <div class="post_footer">
                         <div class="post_img">
                             <a href="{{ config('isec.base_url') }}/post/{{ $featureds[7]->slug }}">
-                                @if ($featureds[7]->cover)
-                                    <img src="{{ $featureds[7]->square_cover_image }}" alt="letest_post1" width="90" style="border-radius: 5px;">
-                                @endif
+                                <img src="{{ $featureds[7]->square_cover_image }}" alt="letest_post1" width="90" style="border-radius: 5px;">
                             </a>
                         </div>
                         <div class="post_content" style="line-height: 1 !important">
@@ -540,7 +534,7 @@
 
                                             <small
                                                 style="color:#ffffff;">{{ \Carbon\Carbon::parse($act->created_at)->format('d
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    F Y') }}</small><br>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    F Y') }}</small><br>
                                             <a style="color:#ffffff;" href="{{ config('isec.base_url') }}/post/{{ $act->slug }}">{{ \Illuminate\Support\Str::limit($act->title, 100, $end = '...') }}&nbsp;</a>
 
                                         </div>
