@@ -65,21 +65,21 @@ class User extends Authenticatable
         return $this->belongsTo(Kabkota::class, 'id_kabkota');
     }
 
-    protected $appends = ['age', 'name_phone'];
+    protected $appends = ['name_phone'];
 
-    public function getAgeAttribute()
-    {
+    // public function getAgeAttribute()
+    // {
 
-        if (substr($this->attributes['username'], 0, 4) != 'adm.') {
-            $rawBD = strlen($this->attributes['username']) == 18 ? substr($this->attributes['username'], 0, 8) : null;
-            if ($rawBD) {
-                $birthDate = substr($rawBD, 0, 4) . '-' . substr($rawBD, 4, 2) . '-' . substr($rawBD, 6, 2) . ' 00:00:00';
-                $interval = date_diff(date_create(), date_create($birthDate));
-                return $interval->format("%Y Tahun, %M Bulan, %d Hari");
-            }
-            return 'undetected';
-        } else {
-            return 'undetected';
-        }
-    }
+    //     if (substr($this->attributes['username'], 0, 4) != 'adm.') {
+    //         $rawBD = strlen($this->attributes['username']) == 18 ? substr($this->attributes['username'], 0, 8) : null;
+    //         if ($rawBD) {
+    //             $birthDate = substr($rawBD, 0, 4) . '-' . substr($rawBD, 4, 2) . '-' . substr($rawBD, 6, 2) . ' 00:00:00';
+    //             $interval = date_diff(date_create(), date_create($birthDate));
+    //             return $interval->format("%Y Tahun, %M Bulan, %d Hari");
+    //         }
+    //         return 'undetected';
+    //     } else {
+    //         return 'undetected';
+    //     }
+    // }
 }
