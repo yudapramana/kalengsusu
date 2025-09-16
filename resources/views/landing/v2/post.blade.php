@@ -10,25 +10,40 @@
     <meta name="keywords" content="{{ $post->keywords }}">
     <meta name="author" content="Web Kemenag Kanwil Prov Sumbar" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-    <meta name="revisit-after" content="1 Days" />
+    <link rel="canonical" href="{{ URL::current() }}" />
 
-    <!-- Open Graph / Facebook -->
+    {{-- Open Graph / Facebook --}}
     <meta property="og:site_name" content="Web Kemenag Kanwil Prov Sumbar">
-    <meta property="og:title" content="Web Kemenag Kanwil Prov Sumbar - {{ $post->title }} ">
-    <meta property="og:locale" content="id_ID">
-
-    <meta property="og:type" content=article />
-    <meta property="og:url" content="{{ URL::current() }}">
+    <meta property="og:title" content="{{ $post->title }}">
     <meta property="og:description" content="{{ $post->meta_desc }}">
-    <meta property="og:image" content="{{ $post->cover }}">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{ URL::current() }}">
+    {{-- gunakan cover_url accessor; fallback jika null --}}
+    @php
+        $ogImage = $post->cover_url ?? 'https://res.cloudinary.com/dezj1x6xp/image/upload/v1698216019/PandanViewMandeh/video-placeholder_kfnvxm.jpg';
+    @endphp
+    <meta property="og:image" content="{{ $ogImage }}">
+    <meta property="og:image:secure_url" content="{{ $ogImage }}">
+    {{-- optional: width/height jika diketahui --}}
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="id_ID">
+    @if ($post->created_at)
+        <meta property="article:published_time" content="{{ $post->created_at->toIso8601String() }}">
+    @endif
+    @if ($post->updated_at)
+        <meta property="article:modified_time" content="{{ $post->updated_at->toIso8601String() }}">
+    @endif
+    <meta property="article:author" content="{{ $post->user->name ?? '' }}">
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="{{ URL::current() }}">
-    <meta property="twitter:title" content="{{ $post->title }}">
-    <meta property="twitter:description" content="{{ $post->meta_desc }}">
-    <meta property="twitter:image" content="{{ $post->cover }}">
-    <meta name="twitter:site" content="{{ URL::current() }}" />
+    {{-- Twitter --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $post->title }}">
+    <meta name="twitter:description" content="{{ $post->meta_desc }}">
+    <meta name="twitter:image" content="{{ $ogImage }}">
+    {{-- optionally add twitter:site or twitter:creator --}}
+    {{-- <meta name="twitter:site" content="@your_twitter_handle"> --}}
+    {{-- <meta name="twitter:creator" content="@author_handle"> --}}
 
     <link rel="canonical" href="{{ URL::current() }}" />
     <link rel="alternate" hreflang="en-US" href="{{ URL::current() }}" />
@@ -100,13 +115,51 @@
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <ul class="list_none social_icons border_social rounded_social">
-                                                <li><a href="#"><i class="ion-social-facebook"></i></a></li>
-                                                <li><a href="#"><i class="ion-social-twitter"></i></a></li>
-                                                <li><a href="#"><i class="ion-social-googleplus"></i></a></li>
-                                                <li><a href="#"><i class="ion-social-youtube-outline"></i></a></li>
-                                                <li><a href="#"><i class="ion-social-instagram-outline"></i></a></li>
-                                            </ul>
+                                            <div class="share-buttons">
+                                                @php
+                                                    $shareUrl = urlencode(URL::current());
+                                                    $shareTitle = urlencode($post->title);
+                                                    $shareDesc = urlencode($post->meta_desc);
+                                                    $shareImage = urlencode($ogImage);
+                                                @endphp
+
+                                                <ul class="list_none social_icons border_social rounded_social">
+                                                    {{-- Facebook --}}
+                                                    <li>
+                                                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ $shareUrl }}" class="share-btn" data-popup="true" data-href="https://www.facebook.com/sharer/sharer.php?u={{ $shareUrl }}" title="Share to Facebook">
+                                                            <i class="ion-social-facebook"></i>
+                                                        </a>
+                                                    </li>
+
+                                                    {{-- Twitter --}}
+                                                    <li>
+                                                        <a href="https://twitter.com/intent/tweet?url={{ $shareUrl }}&text={{ $shareTitle }}" class="share-btn" data-popup="true" data-href="https://twitter.com/intent/tweet?url={{ $shareUrl }}&text={{ $shareTitle }}" title="Share to Twitter">
+                                                            <i class="ion-social-twitter"></i>
+                                                        </a>
+                                                    </li>
+
+                                                    {{-- LinkedIn --}}
+                                                    <li>
+                                                        <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ $shareUrl }}" class="share-btn" data-popup="true" data-href="https://www.linkedin.com/sharing/share-offsite/?url={{ $shareUrl }}" title="Share to LinkedIn">
+                                                            <i class="ion-social-linkedin-outline"></i>
+                                                        </a>
+                                                    </li>
+
+                                                    {{-- WhatsApp (mobile & web) --}}
+                                                    <li>
+                                                        <a href="https://api.whatsapp.com/send?text={{ $shareTitle }}%20{{ $shareUrl }}" class="share-btn" target="_blank" title="Share to WhatsApp">
+                                                            <i class="ion-social-whatsapp"></i>
+                                                        </a>
+                                                    </li>
+
+                                                    {{-- Telegram --}}
+                                                    <li>
+                                                        <a href="https://t.me/share/url?url={{ $shareUrl }}&text={{ $shareTitle }}" class="share-btn" data-popup="true" data-href="https://t.me/share/url?url={{ $shareUrl }}&text={{ $shareTitle }}" title="Share to Telegram">
+                                                            <i class="ion-paper-airplane"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -178,4 +231,39 @@
 
 @section('_scripts')
     {{-- No Data --}}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": {!! json_encode($post->title) !!},
+      "description": {!! json_encode($post->meta_desc) !!},
+      "image": {!! json_encode($ogImage) !!},
+      "author": {
+        "@type": "Person",
+        "name": {!! json_encode($post->user->name ?? '') !!}
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Web Kemenag Kanwil Prov Sumbar"
+      },
+      "datePublished": {!! json_encode(optional($post->created_at)->toIso8601String()) !!},
+      "dateModified": {!! json_encode(optional($post->updated_at)->toIso8601String()) !!}
+    }
+    </script>
+    <script>
+        document.addEventListener('click', function(e) {
+            var el = e.target.closest('a.share-btn');
+            if (!el) return;
+            var href = el.getAttribute('data-href') || el.href;
+            // if target="_blank" (like WhatsApp), let it open normally
+            if (el.target === '_blank' && href.includes('api.whatsapp.com')) return;
+
+            e.preventDefault();
+            var w = 600,
+                h = 500;
+            var left = (screen.width / 2) - (w / 2);
+            var top = (screen.height / 2) - (h / 2);
+            window.open(href, 'ShareWindow', 'toolbar=0,status=0,width=' + w + ',height=' + h + ',top=' + top + ',left=' + left);
+        });
+    </script>
 @endsection
