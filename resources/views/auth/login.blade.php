@@ -73,6 +73,8 @@
             margin-bottom: 1rem;
         }
     </style>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
 </head>
 
 <body>
@@ -124,6 +126,14 @@
                                                 <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
                                                 <label class="form-check-label" for="remember">Ingat Saya</label>
                                             </div>
+                                        </div>
+
+                                        <div class="col-12 center text-center">
+                                            <div class="cf-turnstile" data-sitekey="{{ env('TURNSTILE_SITE_KEY') }}" data-theme="light">
+                                            </div>
+                                            @error('turnstile')
+                                                <div class="text-error">{{ $message }}</div>
+                                            @enderror
                                         </div>
 
                                         <div class="col-12">
@@ -233,8 +243,9 @@
                     if (res.ok) {
                         // success
                         if (json.status === 'success' || json.status === 'ok' || json.redirect) {
-                            const redirect = json.redirect || '{{ url('admin/home') }}';
-                            // small delay to show success if you want
+                            // gunakan redirect dari server (jika ada), kalau tidak pakai path relatif "admin/home"
+                            // path relatif (tanpa leading slash) membuat URL "/controlcenter/login" -> "/controlcenter/admin/home"
+                            const redirect = json.redirect || 'admin/home';
                             window.location.href = redirect;
                             return;
                         } else {

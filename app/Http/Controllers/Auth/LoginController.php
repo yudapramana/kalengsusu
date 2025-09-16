@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -11,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Http;
 
 class LoginController extends Controller
 {
@@ -33,7 +35,7 @@ class LoginController extends Controller
      * @var string
      */
     // protected $redirectTo = RouteServiceProvider::HOME;
-    protected $redirectTo = 'admin/home';
+    protected $redirectTo = '/admin/home';
 
 
     /**
@@ -93,6 +95,7 @@ class LoginController extends Controller
         $validator = Validator::make($request->all(), [
             $field => 'required|string',
             'password' => 'required|string',
+            'cf-turnstile-response' => 'required', // pastikan ada response
         ]);
 
         if ($validator->fails()) {
@@ -103,6 +106,21 @@ class LoginController extends Controller
                 ], 422);
             }
             return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+         // Verifikasi ke Cloudflare Turnstile
+        $response = Http::asForm()->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
+            'secret' => env('TURNSTILE_SECRET_KEY'),
+            'response' => $request->input('cf-turnstile-response'),
+            'remoteip' => $request->ip(),
+        ]);
+
+        $data = $response->json();
+
+        if (!($data['success'] ?? false)) {
+            return back()->withErrors([
+                'turnstile' => 'Verifikasi keamanan gagal. Silakan coba lagi.',
+            ])->withInput();
         }
 
         // Throttle / lockout (menggunakan trait AuthenticatesUsers)
@@ -135,7 +153,8 @@ class LoginController extends Controller
             }
 
             // update last login info (duplikat juga di authenticated(), tapi aman)
-            $user = Auth::user();
+            $userLoggedin = Auth::user();
+            $user = User::find($userLoggedin->id);
             $user->update([
                 'last_login_at' => Carbon::now()->toDateTimeString(),
                 'last_login_ip' => $request->getClientIp()
