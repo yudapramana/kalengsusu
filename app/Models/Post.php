@@ -141,7 +141,7 @@ class Post extends Model
 
     public function getRectangleCoverImageAttribute()
     {
-        $placeholder = "http://res.cloudinary.com/dezj1x6xp/image/upload/v1698216019/PandanViewMandeh/video-placeholder_kfnvxm.jpg";
+        $placeholder = "http://res.cloudinary.com/dezj1x6xp/image/upload/c_fill,ar_16:9,q_50/v1698216019/PandanViewMandeh/video-placeholder_kfnvxm.jpg";
         $separator = '/upload/';
 
         $cover = $this->attributes['cover'] ?? null;
