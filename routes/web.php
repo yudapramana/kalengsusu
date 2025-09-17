@@ -31,8 +31,8 @@ Route::get('/viewer-counts', function(Request $request) {
     $monthly = Post::whereMonth('created_at', $month)->sum('reads');
     
     // daily
-    $weekStartDate = $now->startOfWeek(Carbon::MONDAY); // Modifies $now to the start of the week
-    $weekEndDate = $now->endOfWeek(Carbon::SUNDAY);   // Modifies $now to the end of the week
+    $weekStartDate = $now->startOfWeek(Carbon::MONDAY)->format('Y-m-d H:i:s'); // Modifies $now to the start of the week
+    $weekEndDate = $now->endOfWeek(Carbon::SUNDAY)->format('Y-m-d H:i:s');;   // Modifies $now to the end of the week
 
     $daily = Post::whereBetween('created_at', [$weekStartDate, $weekEndDate])->sum('reads');
 
