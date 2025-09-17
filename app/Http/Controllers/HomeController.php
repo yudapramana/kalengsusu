@@ -44,6 +44,8 @@ class HomeController extends Controller
 
         $daerah_posts_chunk = $daerah_posts->chunk(4);
 
+        $galleries = \App\Models\Gallery::where('type', 'ekoran')->take(6)->get();
+
         return view('landing.v2.home', [
             'title' => 'Web Utama Kantor Wilayah Kementerian Agama Provinsi Sumatera Barat',
             'accountfb' => 'pandanviewmandeh',
@@ -58,6 +60,7 @@ class HomeController extends Controller
             'daerah_posts_chunk' => $daerah_posts_chunk,
             'featureds' => $featureds,
             'main_posts' => $main_posts,
+            'galleries' => $galleries,
         ]);
     }
 

@@ -534,7 +534,7 @@
 
                                             <small
                                                 style="color:#ffffff;">{{ \Carbon\Carbon::parse($act->created_at)->format('d
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    F Y') }}</small><br>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    F Y') }}</small><br>
                                             <a style="color:#ffffff;" href="{{ config('isec.base_url') }}/post/{{ $act->slug }}">{{ \Illuminate\Support\Str::limit($act->title, 100, $end = '...') }}&nbsp;</a>
 
                                         </div>
@@ -653,6 +653,57 @@
             </div>
         </div>
     </section>
+
+
+    {{-- EKORAN --}}
+
+    <section class="overflow_hide p-0 m-0 pt-3 pb-5 bg-white">
+        <div class="container pt-3 animation" data-animation="fadeInDown" data-animation-delay="0.2s">
+            <div class="widget">
+                <h3 class="heading_s2">E-Koran</h3>
+            </div>
+        </div>
+
+        <div class="container">
+
+            {{-- <div class="row">
+                <div class="col-12">
+                    <div class="cleafix small_divider"></div>
+                </div>
+            </div> --}}
+
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="portfolio_container gutter_small work_col3 portfolio_gallery portfolio_style3 animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.4s" style="animation-delay: 0.4s; opacity: 1; position: relative; height: 1079.86px;">
+                        <li class="grid-sizer"></li>
+
+                        @foreach ($galleries as $key => $gallery)
+                            <!-- START PORTFOLIO ITEM -->
+                            <li class="portfolio-item {{ $gallery->filter_tag }}">
+                                <div class="portfolio_item">
+                                    <a href="#" class="image_link">
+                                        <img src="{{ $gallery->thumbnail_image }}" alt="{{ $gallery->alt }}">
+                                    </a>
+                                    <div class="portfolio_content">
+                                        <div class="link_container">
+                                            <a href="{{ $gallery->image_url }}" class="image_popup"><i class="ion-image"></i></a>
+                                            <a href="#"><i class="ion-plus"></i></a>
+                                        </div>
+                                        <h5><a href="#">{{ $gallery->title }}</a></h5>
+                                        <p>{{ $gallery->description }}</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- END PORTFOLIO ITEM -->
+                        @endforeach
+
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    {{-- END OF EKORAN --}}
 
 
 
