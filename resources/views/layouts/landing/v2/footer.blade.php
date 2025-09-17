@@ -28,7 +28,7 @@
                     <ul class="list_none widget_links">
                         <li><a>Hari ini: {{ $daily }}</a></li>
                         <li><a>Bulan ini: {{ $monthly }}</a></li>
-                        <li><a>Tahun ini: {{ $monthly }}</a></li>
+                        <li><a>Tahun ini: {{ $yearly }}</a></li>
                     </ul>
 
 

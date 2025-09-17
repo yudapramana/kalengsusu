@@ -44,7 +44,7 @@ class HomeController extends Controller
 
         $daerah_posts_chunk = $daerah_posts->chunk(4);
 
-         // yearly
+        // yearly
         $now = Carbon::now();
         $year = $now->year;
         $yearly = Post::whereYear('created_at', $year)->sum('reads');
