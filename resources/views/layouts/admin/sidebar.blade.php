@@ -42,14 +42,20 @@
         <li class="nav-heading">Kelola Web</li>
 
         {{-- @can('menu-information') --}}
-        @if (Auth::user()->hasRole('super_administrator') || Auth::user()->hasRole('administrator'))
+        @if (Auth::user()->hasRole('super_administrator') || Auth::user()->hasRole('administrator') || Auth::user()->hasRole('kontributor_utama'))
             <li class="nav-item">
                 <a class="nav-link @if (request()->segment(2) == 'information') @else collapsed @endif" data-bs-target="#information-nav" data-bs-toggle="collapse" href="#" aria-expanded="@if (request()->segment(2) == 'information') true @else false @endif">
                     <i class="bi bi-journal-text"></i><span>Informasi</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="information-nav" class="nav-content collapse @if (request()->segment(2) == 'information') show @endif" data-bs-parent="#sidebar-nav" style="">
 
-                    @if (Auth::user()->hasRole('super_administrator') || Auth::user()->hasRole('administrator') || Auth::user()->hasRole('kontributor_utama'))
+                    <li>
+                        <a href="{{ route('galleries.index') }}" class="@if (request()->segment(3) == 'galleries') active @endif">
+                            <i class=" bi bi-circle"></i><span>Galleries</span>
+                        </a>
+                    </li>
+
+                    @if (Auth::user()->hasRole('super_administrator') || Auth::user()->hasRole('administrator'))
                         <li>
                             <a href="{{ route('services.index') }}" class="@if (request()->segment(3) == 'services') active @endif">
                                 <i class=" bi bi-circle"></i><span>Services</span>
@@ -58,13 +64,6 @@
                         <li>
                             <a href="{{ route('activities.index') }}" class="@if (request()->segment(3) == 'activities') active @endif">
                                 <i class=" bi bi-circle"></i><span>Activities</span>
-                            </a>
-                        </li>
-
-
-                        <li>
-                            <a href="{{ route('galleries.index') }}" class="@if (request()->segment(3) == 'galleries') active @endif">
-                                <i class=" bi bi-circle"></i><span>Galleries</span>
                             </a>
                         </li>
                         <li>
