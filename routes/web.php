@@ -791,6 +791,21 @@ Route::group(['middleware' => ['web']], function () {
 
         if ($post->status == 'published') {
 
+        // yearly
+        $now = Carbon::now();
+        $year = $now->year;
+        $yearly = Post::whereYear('created_at', $year)->sum('reads');
+
+        // monthly
+        $month = $now->month;
+        $monthly = Post::whereYear('created_at', $year)->whereMonth('created_at', $month)->sum('reads');
+        
+        // daily
+        $weekStartDate = $now->startOfWeek(Carbon::MONDAY)->format('Y-m-d H:i:s'); // Modifies $now to the start of the week
+        $weekEndDate = $now->endOfWeek(Carbon::SUNDAY)->format('Y-m-d H:i:s');;   // Modifies $now to the end of the week
+
+        $daily = Post::whereBetween('created_at', [$weekStartDate, $weekEndDate])->sum('reads');
+
             $cookie_name = (\Str::replace('.', '', ($request->ip())) . '-' . $post->id);
 
             $cookie = \Cookie::get($cookie_name);
@@ -817,7 +832,10 @@ Route::group(['middleware' => ['web']], function () {
                 'categories' =>  $categories,
                 'recent_posts' => $recent_posts,
                 'tags' => $tags,
-                'post' => $post
+                'post' => $post,
+                'yearly' => number_format($yearly, 0, ',', '.'),
+                'monthly' => number_format($monthly, 0, ',', '.'),
+                'daily' => number_format($daily, 0, ',', '.'),
             ])->withCookie($cookie); //store the cookie;
 
         } else {
