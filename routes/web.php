@@ -1,10 +1,12 @@
 <?php
 
+use App\Models\Post;
 use App\Models\RefDataSubKlasifikasi;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 
 /*
@@ -18,6 +20,28 @@ use Illuminate\Support\Str;
 |
 */
 
+Route::get('/viewer-counts', function(Request $request) {
+    // yearly
+    $now = Carbon::now();
+    $year = $now->year;
+    $yearly = Post::whereYear('created_at', $year)->sum('reads');
+
+    // monthly
+    $month = $now->month;
+    $monthly = Post::whereYear('created_at', $month)->sum('reads');
+    
+    // daily
+    $weekStartDate = $now->startOfWeek(); // Modifies $now to the start of the week
+    $weekEndDate = $now->endOfWeek();   // Modifies $now to the end of the week
+
+    $daily = Post::whereBetween('created_at', [$weekStartDate, $weekEndDate])->sum('reads');
+
+    return response()->json([
+        'yearly' => $yearly,
+        'monthly' => $monthly,
+        'daily' => $daily,
+    ]);
+});
 
 Route::post('/poststatus/switch', function (Request $request) {
 
