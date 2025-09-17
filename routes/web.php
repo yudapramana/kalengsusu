@@ -34,7 +34,9 @@ Route::get('/viewer-counts', function(Request $request) {
     $weekStartDate = $now->startOfWeek(Carbon::MONDAY)->format('Y-m-d H:i:s'); // Modifies $now to the start of the week
     $weekEndDate = $now->endOfWeek(Carbon::SUNDAY)->format('Y-m-d H:i:s');;   // Modifies $now to the end of the week
 
-    $daily = Post::whereBetween('created_at', [$weekStartDate, $weekEndDate])->sum('reads');
+    $date_now = $now->format('Y-m-d');
+    return $date_now;
+    $daily = Post::where('created_at', [$weekStartDate, $weekEndDate])->sum('reads');
 
     return response()->json([
         'yearly' => number_format($yearly, 0, '.'),
