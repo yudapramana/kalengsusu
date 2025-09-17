@@ -57,7 +57,7 @@ class HomeController extends Controller
         $weekStartDate = $now->startOfWeek(Carbon::MONDAY)->format('Y-m-d H:i:s'); // Modifies $now to the start of the week
         $weekEndDate = $now->endOfWeek(Carbon::SUNDAY)->format('Y-m-d H:i:s');;   // Modifies $now to the end of the week
 
-        $daily = Post::whereBetween('created_at', [$weekStartDate, $weekEndDate])->sum('reads');
+        $daily = Post::whereBetween('created_at', $now->format('Y-m-d H:i:s'))->sum('reads');
 
         return view('landing.v2.home', [
             'title' => 'Web Utama Kantor Wilayah Kementerian Agama Provinsi Sumatera Barat',
