@@ -36,7 +36,7 @@ Route::get('/viewer-counts', function(Request $request) {
 
     $date_now = $now->format('Y-m-d');
     return $date_now;
-    $daily = Post::where('created_at', [$weekStartDate, $weekEndDate])->sum('reads');
+    $daily = Post::whereBetween('created_at', [$weekStartDate, $weekEndDate])->sum('reads');
 
     return response()->json([
         'yearly' => number_format($yearly, 0, '.'),

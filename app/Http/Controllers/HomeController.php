@@ -58,7 +58,7 @@ class HomeController extends Controller
         $weekEndDate = $now->endOfWeek(Carbon::SUNDAY)->format('Y-m-d H:i:s');  // Modifies $now to the end of the week
         
 
-        $daily = Post::where('created_at', $now->format('Y-m-d'))->sum('reads');
+        $daily = Post::whereDate('created_at', $now->format('Y-m-d'))->sum('reads');
 
         return view('landing.v2.home', [
             'title' => 'Web Utama Kantor Wilayah Kementerian Agama Provinsi Sumatera Barat',
