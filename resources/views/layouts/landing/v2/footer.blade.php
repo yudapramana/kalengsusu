@@ -19,7 +19,7 @@
                         </li>
                         <li>
                             <span class="ti-mobile"></span>
-                            <p>(0756) 28220</p>
+                            <p>(0751) 28220</p>
                         </li>
 
                     </ul>

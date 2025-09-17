@@ -1,7 +1,6 @@
 <aside id="sidebar" class="sidebar">
     <ul class="sidebar-nav" id="sidebar-nav">
-        <li class="nav-item"> <a class="nav-link @if (request()->segment(2) == 'home') @else collapsed @endif"
-                href="{{ route('admin.home') }}">
+        <li class="nav-item"> <a class="nav-link @if (request()->segment(2) == 'home') @else collapsed @endif" href="{{ route('admin.home') }}">
                 <i class="bi bi-grid"></i>
                 <span>Dashboard</span> </a>
         </li>
@@ -23,15 +22,13 @@
         @endcan --}}
         {{-- @endcan --}}
 
-        @if( Auth::user()->hasRole('super_administrator') || Auth::user()->hasRole('administrator'))
+        @if (Auth::user()->hasRole('super_administrator') || Auth::user()->hasRole('administrator'))
+            <li class="nav-heading">Kelola Informasi</li>
+            <li class="nav-item"> <a class="nav-link @if (request()->segment(2) == 'informasi') @else collapsed @endif" href="{{ route('info.index') }}">
+                    <i class="bi bi-clipboard-data"></i>
 
-        <li class="nav-heading">Kelola Informasi</li>
-        <li class="nav-item"> <a class="nav-link @if (request()->segment(2) == 'informasi') @else collapsed @endif"
-                href="{{ route('info.index') }}">
-                <i class="bi bi-clipboard-data"></i>
-
-                <span>Data & Informasi</span> </a>
-        </li>
+                    <span>Data & Informasi</span> </a>
+            </li>
         @endif
 
         {{-- <li class="nav-item"> <a
@@ -45,126 +42,99 @@
         <li class="nav-heading">Kelola Web</li>
 
         {{-- @can('menu-information') --}}
-        @if( Auth::user()->hasRole('super_administrator') || Auth::user()->hasRole('administrator') ||
-        Auth::user()->hasRole('kontributor_utama'))
-        <li class="nav-item">
-            <a class="nav-link @if (request()->segment(2) == 'information') @else collapsed @endif"
-                data-bs-target="#information-nav" data-bs-toggle="collapse" href="#"
-                aria-expanded="@if (request()->segment(2) == 'information') true @else false @endif">
-                <i class="bi bi-journal-text"></i><span>Informasi</span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="information-nav"
-                class="nav-content collapse @if (request()->segment(2) == 'information') show @endif"
-                data-bs-parent="#sidebar-nav" style="">
+        @if (Auth::user()->hasRole('super_administrator') || Auth::user()->hasRole('administrator'))
+            <li class="nav-item">
+                <a class="nav-link @if (request()->segment(2) == 'information') @else collapsed @endif" data-bs-target="#information-nav" data-bs-toggle="collapse" href="#" aria-expanded="@if (request()->segment(2) == 'information') true @else false @endif">
+                    <i class="bi bi-journal-text"></i><span>Informasi</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="information-nav" class="nav-content collapse @if (request()->segment(2) == 'information') show @endif" data-bs-parent="#sidebar-nav" style="">
 
-                @if( Auth::user()->hasRole('super_administrator') || Auth::user()->hasRole('administrator') ||
-                Auth::user()->hasRole('kontributor_utama'))
-                <li>
-                    <a href="{{ route('services.index') }}"
-                        class="@if (request()->segment(3) == 'services') active @endif">
-                        <i class=" bi bi-circle"></i><span>Services</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('activities.index') }}"
-                        class="@if (request()->segment(3) == 'activities') active @endif">
-                        <i class=" bi bi-circle"></i><span>Activities</span>
-                    </a>
-                </li>
+                    @if (Auth::user()->hasRole('super_administrator') || Auth::user()->hasRole('administrator') || Auth::user()->hasRole('kontributor_utama'))
+                        <li>
+                            <a href="{{ route('services.index') }}" class="@if (request()->segment(3) == 'services') active @endif">
+                                <i class=" bi bi-circle"></i><span>Services</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('activities.index') }}" class="@if (request()->segment(3) == 'activities') active @endif">
+                                <i class=" bi bi-circle"></i><span>Activities</span>
+                            </a>
+                        </li>
 
 
-                <li>
-                    <a href="{{ route('galleries.index') }}"
-                        class="@if (request()->segment(3) == 'galleries') active @endif">
-                        <i class=" bi bi-circle"></i><span>Galleries</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('carousels.index') }}"
-                        class="@if (request()->segment(3) == 'carousels') active @endif">
-                        <i class=" bi bi-circle"></i><span>Carousels</span>
-                    </a>
-                </li>
-                @endif
+                        <li>
+                            <a href="{{ route('galleries.index') }}" class="@if (request()->segment(3) == 'galleries') active @endif">
+                                <i class=" bi bi-circle"></i><span>Galleries</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('carousels.index') }}" class="@if (request()->segment(3) == 'carousels') active @endif">
+                                <i class=" bi bi-circle"></i><span>Carousels</span>
+                            </a>
+                        </li>
+                    @endif
 
-            </ul>
-        </li>
+                </ul>
+            </li>
         @endif
         {{-- @endcan --}}
 
         {{-- @can('menu-data') --}}
-        @if( Auth::user()->hasRole('super_administrator') || Auth::user()->hasRole('administrator'))
-        <li class="nav-item">
-            <a class="nav-link @if (request()->segment(2) == 'data') @else collapsed @endif" data-bs-target="#data-nav"
-                data-bs-toggle="collapse" href="#"
-                aria-expanded="@if (request()->segment(2) == 'data') true @else false @endif">
-                <i class="bi bi-chat-left-text"></i><span>Data Input</span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="data-nav" class="nav-content collapse @if (request()->segment(2) == 'data') show @endif"
-                data-bs-parent="#sidebar-nav" style="">
-                @can('page-data-messages')
-                <li>
-                    <a href="{{ route('messages.index') }}"
-                        class="@if (request()->segment(3) == 'messages') active @endif">
-                        <i class=" bi bi-circle"></i><span>Messages</span>
-                    </a>
-                </li>
-                @endcan
-                @can('page-data-users')
-                <li>
-                    <a href="{{ route('users.index') }}" class="@if (request()->segment(3) == 'users') active @endif">
-                        <i class=" bi bi-circle"></i><span>Users</span>
-                    </a>
-                </li>
-                @endcan
-                @can('page-data-roles')
-                <li>
-                    <a href="{{ route('roles.index') }}" class="@if (request()->segment(3) == 'roles') active @endif">
-                        <i class=" bi bi-circle"></i><span>Roles</span>
-                    </a>
-                </li>
-                @endcan
-            </ul>
-        </li>
+        @if (Auth::user()->hasRole('super_administrator') || Auth::user()->hasRole('administrator'))
+            <li class="nav-item">
+                <a class="nav-link @if (request()->segment(2) == 'data') @else collapsed @endif" data-bs-target="#data-nav" data-bs-toggle="collapse" href="#" aria-expanded="@if (request()->segment(2) == 'data') true @else false @endif">
+                    <i class="bi bi-chat-left-text"></i><span>Data Input</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="data-nav" class="nav-content collapse @if (request()->segment(2) == 'data') show @endif" data-bs-parent="#sidebar-nav" style="">
+                    @can('page-data-messages')
+                        <li>
+                            <a href="{{ route('messages.index') }}" class="@if (request()->segment(3) == 'messages') active @endif">
+                                <i class=" bi bi-circle"></i><span>Messages</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('page-data-users')
+                        <li>
+                            <a href="{{ route('users.index') }}" class="@if (request()->segment(3) == 'users') active @endif">
+                                <i class=" bi bi-circle"></i><span>Users</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('page-data-roles')
+                        <li>
+                            <a href="{{ route('roles.index') }}" class="@if (request()->segment(3) == 'roles') active @endif">
+                                <i class=" bi bi-circle"></i><span>Roles</span>
+                            </a>
+                        </li>
+                    @endcan
+                </ul>
+            </li>
         @endif
         {{-- @endcan --}}
 
         {{-- @can('menu-blog') --}}
         <li class="nav-item">
-            <a class="nav-link @if (request()->segment(2) == 'blog') @else collapsed @endif" data-bs-target="#blog-nav"
-                data-bs-toggle="collapse" href="#"
-                aria-expanded="@if (request()->segment(2) == 'blog') true @else false @endif">
+            <a class="nav-link @if (request()->segment(2) == 'blog') @else collapsed @endif" data-bs-target="#blog-nav" data-bs-toggle="collapse" href="#" aria-expanded="@if (request()->segment(2) == 'blog') true @else false @endif">
                 <i class="bi bi-file-earmark-post"></i><span>Berita</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="blog-nav" class="nav-content collapse @if (request()->segment(2) == 'blog') show @endif"
-                data-bs-parent="#sidebar-nav" style="">
+            <ul id="blog-nav" class="nav-content collapse @if (request()->segment(2) == 'blog') show @endif" data-bs-parent="#sidebar-nav" style="">
 
                 @foreach ($bootCategories as $cat)
+                    @if (Auth::user()->hasRole('super_administrator') || Auth::user()->hasRole('administrator') || Auth::user()->hasRole('kontributor_utama'))
+                        <li>
+                            <a href="{{ route('posts.index', ['category' => $cat->slug]) }}" class="{{ request()->segment(3) == 'posts' ? (isset($category) ? ($category == $cat->slug ? 'active' : '') : '-') : '-' }}">
+                                <i class=" bi bi-circle"></i><span>{{ $cat->title }}</span>
+                            </a>
+                        </li>
+                    @endif
 
-                @if( Auth::user()->hasRole('super_administrator') || Auth::user()->hasRole('administrator') ||
-                Auth::user()->hasRole('kontributor_utama'))
-
-                <li>
-                    <a href="{{ route('posts.index', ['category' => $cat->slug]) }}"
-                        class="{{    request()->segment(3) == 'posts' ?  (isset($category)  ? ($category == $cat->slug ? 'active' : '') : '-'     )   : '-'  }}">
-                        <i class=" bi bi-circle"></i><span>{{$cat->title}}</span>
-                    </a>
-                </li>
-
-                @endif
-
-                @if(Auth::user()->hasRole('kontributor_daerah') && ( $cat->slug == 'artikel' || $cat->slug =='daerah'))
-
-                <li>
-                    <a href="{{ route('posts.index', ['category' => $cat->slug]) }}"
-                        class="{{    request()->segment(3) == 'posts' ?  (isset($category)  ? ($category == $cat->slug ? 'active' : '') : '-'     )   : '-'  }}">
-                        <i class=" bi bi-circle"></i><span>{{$cat->title}}</span>
-                    </a>
-                </li>
-
-                @endif
-
-
+                    @if (Auth::user()->hasRole('kontributor_daerah') && ($cat->slug == 'artikel' || $cat->slug == 'daerah'))
+                        <li>
+                            <a href="{{ route('posts.index', ['category' => $cat->slug]) }}" class="{{ request()->segment(3) == 'posts' ? (isset($category) ? ($category == $cat->slug ? 'active' : '') : '-') : '-' }}">
+                                <i class=" bi bi-circle"></i><span>{{ $cat->title }}</span>
+                            </a>
+                        </li>
+                    @endif
                 @endforeach
 
 
@@ -191,42 +161,37 @@
 
 
         {{-- Setting --}}
-        @if( Auth::user()->hasRole('super_administrator') || Auth::user()->hasRole('administrator'))
+        @if (Auth::user()->hasRole('super_administrator') || Auth::user()->hasRole('administrator'))
 
-        <li class="nav-item">
-            <a class="nav-link @if (request()->segment(2) == 'setting') @else collapsed @endif"
-                data-bs-target="#setting-nav" data-bs-toggle="collapse" href="#"
-                aria-expanded="@if (request()->segment(2) == 'setting') true @else false @endif">
-                <i class="bi bi-gear"></i><span>Settings</span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="setting-nav" class="nav-content collapse @if (request()->segment(2) == 'setting') show @endif"
-                data-bs-parent="#sidebar-nav" style="">
-                @can('page-blog-categories')
-                <li>
-                    <a href="{{ route('categories.index') }}"
-                        class="@if (request()->segment(3) == 'categories') active @endif">
-                        <i class=" bi bi-circle"></i><span>Categories</span>
-                    </a>
-                </li>
-                @endcan
-                @can('page-blog-tags')
-                <li>
-                    <a href="{{ route('tags.index') }}" class="@if (request()->segment(3) == 'tags') active @endif">
-                        <i class=" bi bi-circle"></i><span>Tags</span>
-                    </a>
-                </li>
-                @endcan
+            <li class="nav-item">
+                <a class="nav-link @if (request()->segment(2) == 'setting') @else collapsed @endif" data-bs-target="#setting-nav" data-bs-toggle="collapse" href="#" aria-expanded="@if (request()->segment(2) == 'setting') true @else false @endif">
+                    <i class="bi bi-gear"></i><span>Settings</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="setting-nav" class="nav-content collapse @if (request()->segment(2) == 'setting') show @endif" data-bs-parent="#sidebar-nav" style="">
+                    @can('page-blog-categories')
+                        <li>
+                            <a href="{{ route('categories.index') }}" class="@if (request()->segment(3) == 'categories') active @endif">
+                                <i class=" bi bi-circle"></i><span>Categories</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('page-blog-tags')
+                        <li>
+                            <a href="{{ route('tags.index') }}" class="@if (request()->segment(3) == 'tags') active @endif">
+                                <i class=" bi bi-circle"></i><span>Tags</span>
+                            </a>
+                        </li>
+                    @endcan
 
-                @if( Auth::user()->hasRole('super_administrator') || Auth::user()->hasRole('administrator'))
-                <li>
-                    <a href="{{ route('menus.index', ['id' => '1']) }}"
-                        class="@if (request()->segment(3) == 'menus') active @endif">
-                        <i class=" bi bi-circle"></i><span>Menus</span>
-                    </a>
-                </li>
-                @endif
-            </ul>
-        </li>
+                    @if (Auth::user()->hasRole('super_administrator') || Auth::user()->hasRole('administrator'))
+                        <li>
+                            <a href="{{ route('menus.index', ['id' => '1']) }}" class="@if (request()->segment(3) == 'menus') active @endif">
+                                <i class=" bi bi-circle"></i><span>Menus</span>
+                            </a>
+                        </li>
+                    @endif
+                </ul>
+            </li>
         @endif
 
 
