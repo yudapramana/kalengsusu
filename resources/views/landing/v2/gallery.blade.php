@@ -4,106 +4,100 @@
 
 @section('_styles')
 
-{{-- Primary Meta Tags --}}
-<meta name="title" content="{{$title}}">
-<meta name="description" content="{{$title}}" />
-<meta name="keywords" content="PPID, PPID Kementerian Agama, Web Kemenag Kanwil Prov Sumbar, Komisi Informasi" />
-<meta name="author" content="Web Kemenag Kanwil Prov Sumbar" />
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-<meta name="revisit-after" content="1 Days" />
+    {{-- Primary Meta Tags --}}
+    <meta name="title" content="{{ $title }}">
+    <meta name="description" content="{{ $title }}" />
+    <meta name="keywords" content="PPID, PPID Kementerian Agama, Web Kemenag Kanwil Prov Sumbar, Komisi Informasi" />
+    <meta name="author" content="Web Kemenag Kanwil Prov Sumbar" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="revisit-after" content="1 Days" />
 
-<!-- Open Graph / Facebook -->
-<meta property="og:site_name" content="{{$title}}">
-<meta property="og:title" content="{{$title}}">
-<meta property="og:locale" content="id_ID">
-<meta property="og:description" content="Web - {{$title}}">
-<meta property="og:image" content="{{ asset('sailor/img/logo.png') }}" />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:site_name" content="{{ $title }}">
+    <meta property="og:title" content="{{ $title }}">
+    <meta property="og:locale" content="id_ID">
+    <meta property="og:description" content="Web - {{ $title }}">
+    <meta property="og:image" content="{{ asset('sailor/img/logo.png') }}" />
 
-<meta property="og:type" content=website />
-<meta property="og:url" content="{{ URL::current() }}" />
+    <meta property="og:type" content=website />
+    <meta property="og:url" content="{{ URL::current() }}" />
 
-<!-- Twitter -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="{{$title}}" />
-<meta name="twitter:title" content="{{$title}}" />
-<meta name="twitter:description" content="Web - {{$title}}">
-<meta name="twitter:image" content="{{ asset('sailor/img/logo.png') }}" />
-<meta property="twitter:url" content="{{ URL::current() }}">
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="{{ $title }}" />
+    <meta name="twitter:title" content="{{ $title }}" />
+    <meta name="twitter:description" content="Web - {{ $title }}">
+    <meta name="twitter:image" content="{{ asset('sailor/img/logo.png') }}" />
+    <meta property="twitter:url" content="{{ URL::current() }}">
 
 
-<link rel="canonical" href="{{ URL::current() }}" />
-<link rel="alternate" hreflang="en-US" href="{{ URL::current() }}" />
-<link rel="shortcut icon" type="image/png" href="{{ URL::current() }}" />
+    <link rel="canonical" href="{{ URL::current() }}" />
+    <link rel="alternate" hreflang="en-US" href="{{ URL::current() }}" />
+    <link rel="shortcut icon" type="image/png" href="{{ URL::current() }}" />
 
-<style>
-    .greenext {
-        color: #29b477;
-        font-weight: 600;
-        letter-spacing: 1px;
-    }
-</style>
+    <style>
+        .greenext {
+            color: #29b477;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+    </style>
 @endsection
 
 @section('content')
 
-<hr class="pt-0 mt-0">
+    <hr class="pt-0 mt-0">
 
-<!-- START SECTION CONTACT -->
+    <!-- START SECTION CONTACT -->
 
-<div class="container">
+    <div class="container">
 
-    @if($type == 'foto')
-    <section class="py-5">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-6 col-md-9">
-                    <div class="heading_s3 text-center animation animated fadeInUp" data-animation="fadeInUp"
-                        data-animation-delay="0.2s" style="animation-delay: 0.2s; opacity: 1;">
-                        <h2 class="greenext">Galeri Foto</h2>
-                    </div>
-                    {{-- <p class="text-center animation animated fadeInUp" data-animation="fadeInUp"
+        @if ($type == 'foto' || $type == 'ekoran')
+            <section class="py-5">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-6 col-md-9">
+                            <div class="heading_s3 text-center animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.2s" style="animation-delay: 0.2s; opacity: 1;">
+                                <h2 class="greenext">Galeri {{ $type == 'foto' ? 'Foto' : 'E-Koran' }}</h2>
+                            </div>
+                            {{-- <p class="text-center animation animated fadeInUp" data-animation="fadeInUp"
                         data-animation-delay="0.3s" style="animation-delay: 0.3s; opacity: 1;">Lorem ipsum dolor sit
                         amet, consectetur adipiscing elit. Phasellus blandit massa enim. Nullam id varius nunc id varius
                         nunc.</p> --}}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="cleafix small_divider"></div>
-                </div>
-            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="cleafix small_divider"></div>
+                        </div>
+                    </div>
 
-            <div class="row mb-3 mb-sm-5">
-                <div class="col-md-12 text-center">
-                    <ul class="list_none portfolio_filter filter_tab6 animation animated fadeInUp"
-                        data-animation="fadeInUp" data-animation-delay="0.4s"
-                        style="animation-delay: 0.4s; opacity: 1;">
-                        <li><a href="#" class="current" data-filter="*">all</a></li>
+                    <div class="row mb-3 mb-sm-5">
+                        <div class="col-md-12 text-center">
+                            <ul class="list_none portfolio_filter filter_tab6 animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.4s" style="animation-delay: 0.4s; opacity: 1;">
+                                <li><a href="#" class="current" data-filter="*">all</a></li>
 
-                        @foreach($filterTags as $key => $tag)
-                        <li><a href="#" data-filter="{{ '.' . $tag}}">{{$tag}}</a></li>
-                        @endforeach
+                                @foreach ($filterTags as $key => $tag)
+                                    <li><a href="#" data-filter="{{ '.' . $tag }}">{{ $tag }}</a></li>
+                                @endforeach
 
 
-                        {{-- <li><a href="#" data-filter=".brands">Brands</a></li>
+                                {{-- <li><a href="#" data-filter=".brands">Brands</a></li>
                         <li><a href="#" data-filter=".design">Design</a></li>
                         <li><a href="#" data-filter=".web">Web</a></li>
                         <li><a href="#" data-filter=".adv">Advertising</a></li> --}}
-                    </ul>
-                </div>
-            </div>
+                            </ul>
+                        </div>
+                    </div>
 
-            <div class="row">
-                <div class="col-md-12">
-                    <ul class="portfolio_container gutter_small work_col3 portfolio_gallery portfolio_style3 animation animated fadeInUp"
-                        data-animation="fadeInUp" data-animation-delay="0.4s"
-                        style="animation-delay: 0.4s; opacity: 1; position: relative; height: 1079.86px;">
-                        <li class="grid-sizer"></li>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ul class="portfolio_container gutter_small work_col3 portfolio_gallery portfolio_style3 animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.4s" style="animation-delay: 0.4s; opacity: 1; position: relative; height: 1079.86px;">
+                                <li class="grid-sizer"></li>
 
 
-                        @foreach($galleries as $key => $gallery)
-
-                        {{-- <div class="col-lg-4 col-md-6 portfolio-item {{$gallery->filter_tag}}">
+                                @foreach ($galleries as $key => $gallery)
+                                    {{-- <div class="col-lg-4 col-md-6 portfolio-item {{$gallery->filter_tag}}">
                             <div class="portfolio-wrap">
                                 <img src="{{ $gallery->thumbnail_image }}" class="img-fluid" alt="{{ $gallery->alt }}">
                                 <div class="portfolio-info">
@@ -120,92 +114,83 @@
                             </div>
                         </div> --}}
 
-                        <!-- START PORTFOLIO ITEM -->
-                        <li class="portfolio-item {{$gallery->filter_tag}}">
-                            <div class="portfolio_item">
-                                <a href="#" class="image_link">
-                                    <img src="{{ $gallery->thumbnail_image }}" alt="{{ $gallery->alt }}">
-                                </a>
-                                <div class="portfolio_content">
-                                    <div class="link_container">
-                                        <a href="{{ $gallery->image_url }}" class="image_popup"><i
-                                                class="ion-image"></i></a>
-                                        <a href="#"><i class="ion-plus"></i></a>
-                                    </div>
-                                    <h5><a href="#">{{ $gallery->title }}</a></h5>
-                                    <p>{{ $gallery->description }}</p>
-                                </div>
-                            </div>
-                        </li>
-                        <!-- END PORTFOLIO ITEM -->
-
-
-                        @endforeach
+                                    <!-- START PORTFOLIO ITEM -->
+                                    <li class="portfolio-item {{ $gallery->filter_tag }}">
+                                        <div class="portfolio_item">
+                                            <a href="#" class="image_link">
+                                                <img src="{{ $gallery->thumbnail_image }}" alt="{{ $gallery->alt }}">
+                                            </a>
+                                            <div class="portfolio_content">
+                                                <div class="link_container">
+                                                    <a href="{{ $gallery->image_url }}" class="image_popup"><i class="ion-image"></i></a>
+                                                    <a href="#"><i class="ion-plus"></i></a>
+                                                </div>
+                                                <h5><a href="#">{{ $gallery->title }}</a></h5>
+                                                <p>{{ $gallery->description }}</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!-- END PORTFOLIO ITEM -->
+                                @endforeach
 
 
 
 
-                    </ul>
-                </div>
-            </div>
-
-        </div>
-    </section>
-    @endif
-
-
-    @if($type == 'video')
-    <section class="py-5">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-6 col-md-9">
-                    <div class="heading_s3 text-center animation animated fadeInUp" data-animation="fadeInUp"
-                        data-animation-delay="0.2s" style="animation-delay: 0.2s; opacity: 1;">
-                        <h2 class="greenext">Galeri Video</h2>
+                            </ul>
+                        </div>
                     </div>
-                    {{-- <p class="text-center animation animated fadeInUp" data-animation="fadeInUp"
+
+                </div>
+            </section>
+        @endif
+
+
+        @if ($type == 'video')
+            <section class="py-5">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-6 col-md-9">
+                            <div class="heading_s3 text-center animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.2s" style="animation-delay: 0.2s; opacity: 1;">
+                                <h2 class="greenext">Galeri Video</h2>
+                            </div>
+                            {{-- <p class="text-center animation animated fadeInUp" data-animation="fadeInUp"
                         data-animation-delay="0.3s" style="animation-delay: 0.3s; opacity: 1;">Lorem ipsum dolor sit
                         amet, consectetur adipiscing elit. Phasellus blandit massa enim. Nullam id varius nunc id varius
                         nunc.</p> --}}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="cleafix small_divider"></div>
-                </div>
-            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="cleafix small_divider"></div>
+                        </div>
+                    </div>
 
-            <div class="row mb-3 mb-sm-5">
-                <div class="col-md-12 text-center">
-                    <ul class="list_none portfolio_filter filter_tab6 animation animated fadeInUp"
-                        data-animation="fadeInUp" data-animation-delay="0.4s"
-                        style="animation-delay: 0.4s; opacity: 1;">
-                        <li><a href="#" class="current" data-filter="*">all</a></li>
+                    <div class="row mb-3 mb-sm-5">
+                        <div class="col-md-12 text-center">
+                            <ul class="list_none portfolio_filter filter_tab6 animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.4s" style="animation-delay: 0.4s; opacity: 1;">
+                                <li><a href="#" class="current" data-filter="*">all</a></li>
 
-                        @foreach($filterTags as $key => $tag)
-                        <li><a href="#" data-filter="{{ '.' . $tag}}">{{$tag}}</a></li>
-                        @endforeach
+                                @foreach ($filterTags as $key => $tag)
+                                    <li><a href="#" data-filter="{{ '.' . $tag }}">{{ $tag }}</a></li>
+                                @endforeach
 
 
-                        {{-- <li><a href="#" data-filter=".brands">Brands</a></li>
+                                {{-- <li><a href="#" data-filter=".brands">Brands</a></li>
                         <li><a href="#" data-filter=".design">Design</a></li>
                         <li><a href="#" data-filter=".web">Web</a></li>
                         <li><a href="#" data-filter=".adv">Advertising</a></li> --}}
-                    </ul>
-                </div>
-            </div>
+                            </ul>
+                        </div>
+                    </div>
 
-            <div class="row">
-                <div class="col-md-12">
-                    <ul class="portfolio_container gutter_small work_col3 portfolio_gallery portfolio_style3 animation animated fadeInUp"
-                        data-animation="fadeInUp" data-animation-delay="0.4s"
-                        style="animation-delay: 0.4s; opacity: 1; position: relative; height: 1079.86px;">
-                        <li class="grid-sizer"></li>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ul class="portfolio_container gutter_small work_col3 portfolio_gallery portfolio_style3 animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.4s" style="animation-delay: 0.4s; opacity: 1; position: relative; height: 1079.86px;">
+                                <li class="grid-sizer"></li>
 
 
-                        @foreach($galleries as $key => $gallery)
-
-                        {{-- <div class="col-lg-4 col-md-6 portfolio-item {{$gallery->filter_tag}}">
+                                @foreach ($galleries as $key => $gallery)
+                                    {{-- <div class="col-lg-4 col-md-6 portfolio-item {{$gallery->filter_tag}}">
                             <div class="portfolio-wrap">
                                 <img src="{{ $gallery->thumbnail_image }}" class="img-fluid" alt="{{ $gallery->alt }}">
                                 <div class="portfolio-info">
@@ -222,92 +207,84 @@
                             </div>
                         </div> --}}
 
-                        <!-- START PORTFOLIO ITEM -->
-                        <li class="portfolio-item brands {{$gallery->filter_tag}}">
-                            <div class="portfolio_item">
-                                <a href="#" class="image_link">
-                                    <img src="{{ $gallery->thumbnail_image }}" alt="image">
-                                </a>
-                                <div class="portfolio_content">
-                                    <div class="link_container">
-                                        <a href="{{ $gallery->url }}" class="video_popup"><i
-                                                class="ion-ios-play"></i></a>
-                                        <a href="#"><i class="ion-plus"></i></a>
-                                    </div>
-                                    <h5><a href="#">{{ $gallery->title }}</a></h5>
-                                    <p>{{ $gallery->description }}</p>
-                                </div>
-                            </div>
-                        </li>
-                        <!-- END PORTFOLIO ITEM -->
-
-                        @endforeach
+                                    <!-- START PORTFOLIO ITEM -->
+                                    <li class="portfolio-item brands {{ $gallery->filter_tag }}">
+                                        <div class="portfolio_item">
+                                            <a href="#" class="image_link">
+                                                <img src="{{ $gallery->thumbnail_image }}" alt="image">
+                                            </a>
+                                            <div class="portfolio_content">
+                                                <div class="link_container">
+                                                    <a href="{{ $gallery->url }}" class="video_popup"><i class="ion-ios-play"></i></a>
+                                                    <a href="#"><i class="ion-plus"></i></a>
+                                                </div>
+                                                <h5><a href="#">{{ $gallery->title }}</a></h5>
+                                                <p>{{ $gallery->description }}</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!-- END PORTFOLIO ITEM -->
+                                @endforeach
 
 
 
 
-                    </ul>
-                </div>
-            </div>
-
-        </div>
-    </section>
-    @endif
-
-
-    @if($type == 'ebook')
-    <section class="py-5">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-6 col-md-9">
-                    <div class="heading_s3 text-center animation animated fadeInUp" data-animation="fadeInUp"
-                        data-animation-delay="0.2s" style="animation-delay: 0.2s; opacity: 1;">
-                        <h2 class="greenext">E-Book</h2>
-                        <h5 class="greenext">Karya Buku Digital</h5>
+                            </ul>
+                        </div>
                     </div>
-                    {{-- <p class="text-center animation animated fadeInUp" data-animation="fadeInUp"
+
+                </div>
+            </section>
+        @endif
+
+
+        @if ($type == 'ebook')
+            <section class="py-5">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-6 col-md-9">
+                            <div class="heading_s3 text-center animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.2s" style="animation-delay: 0.2s; opacity: 1;">
+                                <h2 class="greenext">E-Book</h2>
+                                <h5 class="greenext">Karya Buku Digital</h5>
+                            </div>
+                            {{-- <p class="text-center animation animated fadeInUp" data-animation="fadeInUp"
                         data-animation-delay="0.3s" style="animation-delay: 0.3s; opacity: 1;">Lorem ipsum dolor sit
                         amet, consectetur adipiscing elit. Phasellus blandit massa enim. Nullam id varius nunc id varius
                         nunc.</p> --}}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="cleafix small_divider"></div>
-                </div>
-            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="cleafix small_divider"></div>
+                        </div>
+                    </div>
 
-            <div class="row mb-3 mb-sm-5">
-                <div class="col-md-12 text-center">
-                    <ul class="list_none portfolio_filter filter_tab6 animation animated fadeInUp"
-                        data-animation="fadeInUp" data-animation-delay="0.4s"
-                        style="animation-delay: 0.4s; opacity: 1;">
-                        <li><a href="#" class="current" data-filter="*">all</a></li>
+                    <div class="row mb-3 mb-sm-5">
+                        <div class="col-md-12 text-center">
+                            <ul class="list_none portfolio_filter filter_tab6 animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.4s" style="animation-delay: 0.4s; opacity: 1;">
+                                <li><a href="#" class="current" data-filter="*">all</a></li>
 
-                        @foreach($filterTags as $key => $tag)
-                        <li><a href="#" data-filter="{{ '.' . $tag}}">{{$tag}}</a></li>
-                        @endforeach
+                                @foreach ($filterTags as $key => $tag)
+                                    <li><a href="#" data-filter="{{ '.' . $tag }}">{{ $tag }}</a></li>
+                                @endforeach
 
 
-                        {{-- <li><a href="#" data-filter=".brands">Brands</a></li>
+                                {{-- <li><a href="#" data-filter=".brands">Brands</a></li>
                         <li><a href="#" data-filter=".design">Design</a></li>
                         <li><a href="#" data-filter=".web">Web</a></li>
                         <li><a href="#" data-filter=".adv">Advertising</a></li> --}}
-                    </ul>
-                </div>
-            </div>
+                            </ul>
+                        </div>
+                    </div>
 
-            <div class="row">
-                <div class="col-md-12">
-                    <ul class="portfolio_container gutter_small work_col3 portfolio_gallery portfolio_style3 animation animated fadeInUp"
-                        data-animation="fadeInUp" data-animation-delay="0.4s"
-                        style="animation-delay: 0.4s; opacity: 1; position: relative; height: 1079.86px;">
-                        <li class="grid-sizer"></li>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ul class="portfolio_container gutter_small work_col3 portfolio_gallery portfolio_style3 animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.4s" style="animation-delay: 0.4s; opacity: 1; position: relative; height: 1079.86px;">
+                                <li class="grid-sizer"></li>
 
 
-                        @foreach($galleries as $key => $gallery)
-
-                        {{-- <div class="col-lg-4 col-md-6 portfolio-item {{$gallery->filter_tag}}">
+                                @foreach ($galleries as $key => $gallery)
+                                    {{-- <div class="col-lg-4 col-md-6 portfolio-item {{$gallery->filter_tag}}">
                             <div class="portfolio-wrap">
                                 <img src="{{ $gallery->thumbnail_image }}" class="img-fluid" alt="{{ $gallery->alt }}">
                                 <div class="portfolio-info">
@@ -324,57 +301,53 @@
                             </div>
                         </div> --}}
 
-                        <!-- START PORTFOLIO ITEM -->
-                        <li class="portfolio-item {{$gallery->filter_tag}}">
-                            <div class="portfolio_item">
-                                <a href="#" class="image_link">
-                                    <img src="{{ $gallery->thumbnail_image }}" alt="{{ $gallery->alt }}">
-                                </a>
-                                <div class="portfolio_content">
-                                    <div class="link_container">
-                                        <a href="{{ $gallery->image_url }}" class="image_popup"><i
-                                                class="ion-image"></i></a>
-                                        <a href="{{ $gallery->url }}" target="_blank"><i
-                                                class="ion-android-download"></i></a>
-                                    </div>
-                                    <h5><a href="#">{{ $gallery->title }}</a></h5>
-                                    <p>{{ $gallery->description }}</p>
-                                </div>
-                            </div>
-                        </li>
-                        <!-- END PORTFOLIO ITEM -->
-
-
-                        @endforeach
+                                    <!-- START PORTFOLIO ITEM -->
+                                    <li class="portfolio-item {{ $gallery->filter_tag }}">
+                                        <div class="portfolio_item">
+                                            <a href="#" class="image_link">
+                                                <img src="{{ $gallery->thumbnail_image }}" alt="{{ $gallery->alt }}">
+                                            </a>
+                                            <div class="portfolio_content">
+                                                <div class="link_container">
+                                                    <a href="{{ $gallery->image_url }}" class="image_popup"><i class="ion-image"></i></a>
+                                                    <a href="{{ $gallery->url }}" target="_blank"><i class="ion-android-download"></i></a>
+                                                </div>
+                                                <h5><a href="#">{{ $gallery->title }}</a></h5>
+                                                <p>{{ $gallery->description }}</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!-- END PORTFOLIO ITEM -->
+                                @endforeach
 
 
 
 
-                    </ul>
+                            </ul>
+                        </div>
+                    </div>
+
                 </div>
-            </div>
+            </section>
+        @endif
 
-        </div>
-    </section>
-    @endif
-
-</div>
-<!-- END SECTION CONTACT -->
+    </div>
+    <!-- END SECTION CONTACT -->
 
 
 @endsection
 
 
 @section('_scripts')
-{{-- No Data --}}
+    {{-- No Data --}}
 
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
 
-<script>
-    // Cloudinary Widget
+    <script>
+        // Cloudinary Widget
         var myWidget = cloudinary.createUploadWidget({
             cloudName: 'kominfo-sb',
             uploadPreset: 'zwco5rur',
@@ -425,7 +398,7 @@
 
             not_secure_url = not_secure_url.replace("watch?v=", "embed/");
             not_secure_url = not_secure_url + '?autoplay=1'
-            
+
             setTimeout(function() {
                 loadIframe('mfp-iframe', not_secure_url)
             }, 2000);
@@ -435,7 +408,7 @@
         function loadIframe(iframeName, url) {
             var $iframe = $('.' + iframeName);
             if ($iframe.length) {
-                $iframe.attr('src',url);
+                $iframe.attr('src', url);
                 return false;
             }
             return true;
@@ -637,7 +610,7 @@
                 $(element).removeClass('is-invalid');
             }
         });
-</script>
+    </script>
 
 
 @endsection

@@ -23,4 +23,16 @@ class CKEditorController extends Controller
             echo $response;
         }
     }
+
+    public function uploadImage(Request $request)
+    {
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->store('uploads', 'public'); 
+            $url = asset('storage/' . $path);
+
+            return response()->json(['location' => $url]);
+        }
+
+        return response()->json(['error' => 'No file uploaded.'], 400);
+    }
 }
