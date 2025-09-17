@@ -28,7 +28,7 @@ Route::get('/viewer-counts', function(Request $request) {
 
     // monthly
     $month = $now->month;
-    $monthly = Post::whereYear('created_at', $month)->sum('reads');
+    $monthly = Post::whereMonth('created_at', $month)->sum('reads');
     
     // daily
     $weekStartDate = $now->startOfWeek(); // Modifies $now to the start of the week
