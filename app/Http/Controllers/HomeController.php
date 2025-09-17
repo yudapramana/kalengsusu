@@ -44,14 +44,14 @@ class HomeController extends Controller
 
         $daerah_posts_chunk = $daerah_posts->chunk(4);
 
-        // yearly
+         // yearly
         $now = Carbon::now();
         $year = $now->year;
         $yearly = Post::whereYear('created_at', $year)->sum('reads');
 
         // monthly
         $month = $now->month;
-        $monthly = Post::whereMonth('created_at', $month)->sum('reads');
+        $monthly = Post::whereYear('created_at', $year)->whereMonth('created_at', $month)->sum('reads');
         
         // daily
         $weekStartDate = $now->startOfWeek(Carbon::MONDAY)->format('Y-m-d H:i:s'); // Modifies $now to the start of the week
@@ -73,9 +73,9 @@ class HomeController extends Controller
             'daerah_posts_chunk' => $daerah_posts_chunk,
             'featureds' => $featureds,
             'main_posts' => $main_posts,
-            'yearly' => number_format($yearly, 0, '.'),
-            'monthly' => number_format($monthly, 0, '.'),
-            'daily' => number_format($daily, 0, '.'),
+            'yearly' => number_format($yearly, 0, ',', '.'),
+            'monthly' => number_format($monthly, 0, ',', '.'),
+            'daily' => number_format($daily, 0, ',', '.'),
         ]);
     }
 
