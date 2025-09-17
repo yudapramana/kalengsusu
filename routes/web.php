@@ -37,9 +37,9 @@ Route::get('/viewer-counts', function(Request $request) {
     $daily = Post::whereBetween('created_at', [$weekStartDate, $weekEndDate])->sum('reads');
 
     return response()->json([
-        'yearly' => $yearly,
-        'monthly' => $monthly,
-        'daily' => $daily,
+        'yearly' => number_format($yearly, 0, '.'),
+        'monthly' => number_format($monthly, 0, '.'),
+        'daily' => number_format($daily, 0, '.'),
     ]);
 });
 

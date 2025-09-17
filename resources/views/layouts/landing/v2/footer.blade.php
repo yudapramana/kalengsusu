@@ -21,21 +21,20 @@
                             <span class="ti-mobile"></span>
                             <p>(0756) 28220</p>
                         </li>
+
                     </ul>
-                    <ul class="contact_info contact_info_light list_none">
-                        <li><svg xmlns="http://www.w3.org/2000/svg" width="13px" height="13px" viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-                                <path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path>
-                            </svg> Hari ini : 1530</li>
-                        <li><svg xmlns="http://www.w3.org/2000/svg" width="13px" height="13px" viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-                                <path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path>
-                            </svg> Bulan ini : 16167</li>
-                        <li><svg xmlns="http://www.w3.org/2000/svg" width="13px" height="13px" viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-                                <path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path>
-                            </svg> Tahun ini : 16167</li>
-                        <li><svg xmlns="http://www.w3.org/2000/svg" width="13px" height="13px" viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-                                <path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path>
-                            </svg> Total : 16167</li>
+
+                    <h6 class="widget_title mt-3 mb-1">STATISTIK KUNJUNGAN</h6>
+                    <ul class="list_none widget_links">
+                        <li><a>Hari ini: {{ $daily }}</a></li>
+                        <li><a>Bulan ini: {{ $monthly }}</a></li>
+                        <li><a>Tahun ini: {{ $monthly }}</a></li>
                     </ul>
+
+
+
+
+
                 </div>
                 <div class="col-lg-3 col-md-6 mb-4 mb-lg-0 animation" data-animation="fadeInUp" data-animation-delay="0.2s">
                     <h6 class="widget_title">LINK EKSTRA</h6>
@@ -45,8 +44,6 @@
                         <li><a href="https://ppid.kemenag.go.id/">PPID Kemenag RI</a></li>
                         <li><a href="https://pusaka.kemenag.go.id/">Pusaka Kemenag RI</a></li>
                         <li><a href="{{ config('isec.base_url') }}/controlcenter/login">Login</a></li>
-
-
                     </ul>
                 </div>
                 <div class="col-lg-6 col-md-6 mb-4 mb-lg-0 animation" data-animation="fadeInUp" data-animation-delay="0.2s">
