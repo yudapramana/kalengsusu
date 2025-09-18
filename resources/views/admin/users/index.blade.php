@@ -134,6 +134,45 @@
             }
         });
 
+        // parse Cloudinary secure_url to get public_id, version, ext
+        function parseCloudinaryUrl(url) {
+            if (!url) return null;
+
+            // pastikan string
+            url = url.toString().trim();
+
+            // split by slash
+            var parts = url.split('/');
+
+            // typical Cloudinary: https://res.cloudinary.com/{cloud}/image/upload/{version}/{path...}/{file.ext}
+            // cari index 'upload'
+            var uploadIndex = parts.indexOf('upload');
+            if (uploadIndex === -1) return null;
+
+            // version biasanya di uploadIndex + 1 (ex: v1757984949)
+            var versionPart = parts[uploadIndex + 1] && parts[uploadIndex + 1].startsWith('v') ? parts[uploadIndex + 1] : null;
+
+            // public_id + ext mulai dari uploadIndex + 2
+            var publicWithExtArr = parts.slice(uploadIndex + 2); // ["PandanViewMandeh", "Flyer_Natourtravel_wjegxz.jpg"]
+            if (publicWithExtArr.length === 0) return null;
+
+            var publicWithExt = publicWithExtArr.join('/'); // "PandanViewMandeh/Flyer_Natourtravel_wjegxz.jpg"
+
+            // ambil ekstensi (jpg/png/..)
+            var extMatch = publicWithExt.match(/\.([a-zA-Z0-9]+)$/);
+            var ext = extMatch ? extMatch[1] : '';
+
+            // public_id tanpa ekstensi
+            var publicId = publicWithExt.replace(/\.[^/.]+$/, ''); // "PandanViewMandeh/Flyer_Natourtravel_wjegxz"
+
+            return {
+                public_id: publicId,
+                version: versionPart, // bisa null jika tidak ada
+                ext: ext // mis. "jpg"
+            };
+        }
+
+
         // Cover
         var coverWidget = cloudinary.createUploadWidget({
             cloudName: 'dezj1x6xp',
@@ -146,13 +185,21 @@
         }, (error, result) => {
             if (!error && result && result.event === "success") {
                 console.log('Info Arsip Masuk: ', result.info);
-                var linklogo = result.info.secure_url;
-                $('#new-profile_photo').val(linklogo);
+                var url = result.info.secure_url;
+                $('#new-profile_photo').val(url);
+
+                var parsed = parseCloudinaryUrl(url);
+                console.log('parsed');
+                console.log(parsed);
+                if (parsed) {
+                    $('#cover_public_id').val(parsed.public_id);
+                    $('#cover_version').val(parsed.version || '');
+                    $('#cover_ext').val(parsed.ext || '');
+                }
 
                 $('#cover_image_url_btn').hide();
-
                 $('.show-cover-box').show();
-                $('#preview-cover').attr("src", linklogo);
+                $('#preview-cover').attr("src", url);
 
             }
         });
@@ -490,6 +537,8 @@
                 });
 
             });
+
+
 
 
         });

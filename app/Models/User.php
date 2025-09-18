@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Facades\Crypt;
+
 
 
 class User extends Authenticatable
@@ -67,19 +69,31 @@ class User extends Authenticatable
 
     protected $appends = ['name_phone'];
 
-    // public function getAgeAttribute()
-    // {
+    public function getProfilePhotoAttribute($value) 
+    {
+        if (empty($value)) {
+            return null;
+        }
 
-    //     if (substr($this->attributes['username'], 0, 4) != 'adm.') {
-    //         $rawBD = strlen($this->attributes['username']) == 18 ? substr($this->attributes['username'], 0, 8) : null;
-    //         if ($rawBD) {
-    //             $birthDate = substr($rawBD, 0, 4) . '-' . substr($rawBD, 4, 2) . '-' . substr($rawBD, 6, 2) . ' 00:00:00';
-    //             $interval = date_diff(date_create(), date_create($birthDate));
-    //             return $interval->format("%Y Tahun, %M Bulan, %d Hari");
-    //         }
-    //         return 'undetected';
-    //     } else {
-    //         return 'undetected';
-    //     }
-    // }
+        if (stripos($value, 'http') === 0) {
+            return $value;
+        }
+
+        try {
+            $json = Crypt::decryptString($value);
+            $payload = json_decode($json, true);
+
+            if (!$payload || !isset($payload['public_id'])) {
+                return null;
+            }
+
+            $cloudName = config('services.cloudinary.cloud_name', 'dezj1x6xp');
+            $versionSegment = !empty($payload['version']) ? $payload['version'].'/' : '';
+            $ext = !empty($payload['ext']) ? '.'.$payload['ext'] : '';
+
+            return "https://res.cloudinary.com/{$cloudName}/image/upload/{$versionSegment}{$payload['public_id']}{$ext}";
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
 }

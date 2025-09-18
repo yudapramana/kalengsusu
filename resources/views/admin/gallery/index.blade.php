@@ -191,7 +191,6 @@
                     $('#cover_ext').val(parsed.ext || '');
                 }
 
-
                 $('#cover_image_url_btn').hide();
                 $('.show-cover-box').show();
                 $('#preview-cover').attr("src", url);

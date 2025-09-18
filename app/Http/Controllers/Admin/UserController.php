@@ -10,6 +10,8 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Auth;
+use Illuminate\Support\Facades\Crypt;
+
 
 class UserController extends Controller
 {
@@ -121,6 +123,10 @@ class UserController extends Controller
 
         $data = $request->input();
 
+        // Ambil cover_public_id untuk proses enkripsi
+        $cover = null;
+        $coverPublicId = $request->input('cover_public_id', null);
+
         try {
             $validator = Validator::make($request->all(), [
                 'no_hp' => 'required|numeric|min:10',
@@ -130,44 +136,62 @@ class UserController extends Controller
                 'no_hp.min' => 'No HP harus lebih dari 10 digit',
             ]);
 
+            // Jika ada cover_public_id -> buat payload terenkripsi
+            if (!empty($coverPublicId)) {
+                $payload = [
+                    'public_id'   => $coverPublicId,
+                    'version'     => $request->input('cover_version') ?: null,
+                    'ext'         => $request->input('cover_ext') ?: null,
+                    'uploaded_at' => now()->toDateTimeString(),
+                ];
+                $cover = Crypt::encryptString(json_encode($payload));
+            }
+
             if ($data['id_user'] == '') {
+                // create user baru
                 $user = new User();
                 $user->name = $data['name'];
                 $user->username = $data['username'];
-                if (isset($data['new-profile_photo'])) {
-                    $user->profile_photo = $data['new-profile_photo'];
-                }
                 $user->email = $data['email'];
                 $user->no_hp = $data['no_hp'];
                 $user->id_kabkota = $data['kabkota'];
                 $user->password = Hash::make($data['password']);
+
+                if ($cover !== null) {
+                    $user->profile_photo = $cover;
+                }
+
                 $user->save();
             } else {
+                // update user
                 $user = User::findOrFail($data['id_user']);
 
                 unset($data['id_user']);
                 $user->name = $data['name'];
                 $user->username = $data['username'];
-                if (isset($data['new-profile_photo'])) {
-                    $user->profile_photo = $data['new-profile_photo'];
-                }
                 $user->email = $data['email'];
                 $user->no_hp = $data['no_hp'];
                 $user->block = $data['block'];
                 $user->status = $data['status'];
                 $user->id_kabkota = $data['kabkota'];
+
                 if ($data['password'] != '') {
                     $data['password'] = Hash::make($data['password']);
                     $user->password = $data['password'];
                 } else {
                     unset($data['password']);
                 }
+
+                // hanya replace profile_photo jika ada cover baru
+                if ($cover !== null) {
+                    $user->profile_photo = $cover;
+                }
+
                 $user->save();
             }
 
             $user->fresh();
             $user->syncRoles($data['roles']);
-
 
             $code = 200;
             if ($validator->fails()) {
@@ -177,6 +201,9 @@ class UserController extends Controller
                 $message = 'Data Berhasil Disimpan';
             }
         } catch (\Throwable $th) {
+            \Log::error('User store error: '.$th->getMessage(), [
+                'trace' => $th->getTraceAsString()
+            ]);
             $message = $th->getMessage();
         }
 
@@ -186,6 +213,7 @@ class UserController extends Controller
             'code' => $code,
         ], $code);
     }
+
 
     public function destroy(User $user)
     {

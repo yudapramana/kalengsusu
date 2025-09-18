@@ -1,6 +1,5 @@
 <!-- Tambah Group -->
-<div class="modal fade" id="fModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
-    data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade" id="fModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-lg" role="document">
         <form id="fForm" method="post" action="{{ route('users.store') }}" enctype="multipart/form-data">
             {{ csrf_field() }}
@@ -25,18 +24,17 @@
                                         <img class="profile-edit" id="profile_photo_src" src="#" alt="Profile">
                                     </div> --}}
 
-                                    <input class="form-control" type="hidden" name="new-profile_photo"
-                                        id="new-profile_photo">
-                                    <button type="button" id="cover_image_url_btn"
-                                        class="btn btn-secondary btn-sm">Unggah
+                                    {{-- <input class="form-control" type="hidden" name="new-profile_photo" id="new-profile_photo"> --}}
+                                    <input type="hidden" id="cover_public_id" name="cover_public_id" value="">
+                                    <input type="hidden" id="cover_version" name="cover_version" value="">
+                                    <input type="hidden" id="cover_ext" name="cover_ext" value="">
+                                    <button type="button" id="cover_image_url_btn" class="btn btn-secondary btn-sm">Unggah
                                         Foto</button>
 
                                     <div class="show-cover-box profile-edit" style="display:none;">
-                                        <img class="mb-2 rounded-circle " id="preview-cover" src=""
-                                            alt="logo_instansi"><br>
+                                        <img class="mb-2 rounded-circle " id="preview-cover" src="" alt="logo_instansi"><br>
                                         <div class="mb-2">
-                                            <button type="button" id="retry-cover-btn"
-                                                class="btn btn-secondary btn-sm">Unggah Ulang</button>
+                                            <button type="button" id="retry-cover-btn" class="btn btn-secondary btn-sm">Unggah Ulang</button>
                                         </div>
                                     </div>
                                 </div>
@@ -75,11 +73,10 @@
                                 <label class="col-sm-3 col-form-label">Peran Pengguna</label>
                                 <div class="col-sm-9">
                                     @foreach ($all_roles as $role)
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="roles" name="roles[]"
-                                            value="{{ $role }}">
-                                        <label class="form-check-label">{{ $role }}</label>
-                                    </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="roles" name="roles[]" value="{{ $role }}">
+                                            <label class="form-check-label">{{ $role }}</label>
+                                        </div>
                                     @endforeach
                                 </div>
                             </div>
@@ -87,18 +84,16 @@
                             <div class="row mb-3 box-daerah" style="display:none;">
                                 <label class="col-sm-3 col-form-label">Daerah Kab / Kota</label>
                                 <div class="col-sm-9">
-                                    <select name="kabkota" id="kabkota"
-                                        class="form-control form-select select2 @error('kabkota') is-invalid @enderror"
-                                        required>
+                                    <select name="kabkota" id="kabkota" class="form-control form-select select2 @error('kabkota') is-invalid @enderror" required>
                                         <option value="" disabled selected>Pilih atau Skip</option>
                                         @foreach ($kabkotas as $kabkota)
-                                        @if($kabkota->id_kabkota == 0)
-                                        <option selected value="{{ $kabkota->id_kabkota }}">{{ $kabkota->name }}
-                                        </option>
-                                        @else
-                                        <option value="{{ $kabkota->id_kabkota }}">{{ $kabkota->name }}
-                                        </option>
-                                        @endif
+                                            @if ($kabkota->id_kabkota == 0)
+                                                <option selected value="{{ $kabkota->id_kabkota }}">{{ $kabkota->name }}
+                                                </option>
+                                            @else
+                                                <option value="{{ $kabkota->id_kabkota }}">{{ $kabkota->name }}
+                                                </option>
+                                            @endif
                                         @endforeach
                                     </select>
                                 </div>
@@ -117,15 +112,13 @@
                                 <label for="inputText" class="col-sm-3 col-form-label">Block</label>
                                 <div class="col-sm-9">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="block" id="block1"
-                                            value="yes" checked="">
+                                        <input class="form-check-input" type="radio" name="block" id="block1" value="yes" checked="">
                                         <label class="form-check-label" for="block1">
                                             Yes
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="block" id="block1" value="no"
-                                            checked="">
+                                        <input class="form-check-input" type="radio" name="block" id="block1" value="no" checked="">
                                         <label class="form-check-label" for="block1">
                                             No
                                         </label>
@@ -137,15 +130,13 @@
                                 <label for="inputText" class="col-sm-3 col-form-label">Status</label>
                                 <div class="col-sm-9">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="status" id="status1"
-                                            value="active" checked="">
+                                        <input class="form-check-input" type="radio" name="status" id="status1" value="active" checked="">
                                         <label class="form-check-label" for="status1">
                                             Aktif
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="status" id="status1"
-                                            value="inactive" checked="">
+                                        <input class="form-check-input" type="radio" name="status" id="status1" value="inactive" checked="">
                                         <label class="form-check-label" for="status1">
                                             Tidak Aktif
                                         </label>
