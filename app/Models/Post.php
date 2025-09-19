@@ -113,6 +113,12 @@ class Post extends Model
 
             // kalau gagal explode, fallback placeholder
             return $placeholder;
+        } else {
+            $exp = explode($separator, $this->cover_url);
+            
+            if (count($exp) === 2) {
+                return $exp[0] . '/upload/c_fill,ar_16:9,q_5,f_avif/' . $exp[1];
+            }
         }
 
         // 3. Jika bukan http, gunakan accessor cover_url
@@ -161,6 +167,12 @@ class Post extends Model
 
             // kalau gagal explode, fallback placeholder
             return $placeholder;
+        } else {
+            $exp = explode($separator, $this->cover_url);
+            
+            if (count($exp) === 2) {
+                return $exp[0] . '/upload/c_fill,ar_16:9,q_50/' . $exp[1];
+            }
         }
 
         // 3. Jika bukan http, gunakan accessor cover_url
@@ -210,6 +222,12 @@ class Post extends Model
 
             // kalau gagal explode, fallback placeholder
             return $placeholder;
+        } else {
+            $exp = explode($separator, $this->cover_url);
+            
+            if (count($exp) === 2) {
+                return $exp[0] . '/upload/c_fill,h_200,w_200,f_avif,q_50/' . $exp[1];
+            }
         }
 
         // 3. Jika bukan http, gunakan accessor cover_url
@@ -260,6 +278,12 @@ class Post extends Model
 
             // kalau gagal explode, fallback placeholder
             return $placeholder;
+        } else {
+            $exp = explode($separator, $this->cover_url);
+            
+            if (count($exp) === 2) {
+                return $exp[0] . '/upload/c_fill,h_200,w_200/' . $exp[1];
+            }
         }
 
         // 3. Jika bukan http, gunakan accessor cover_url
